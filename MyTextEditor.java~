@@ -50,7 +50,7 @@ public class MyTextEditor extends JFrame implements ActionListener
 		exit = new JMenuItem("Exit");
 		file.add(exit);
 		
-		setJMenuBar(menuBar);
+		frame.setJMenuBar(menuBar);
 		
 		setDefaultCloseOperation(DISPOSE_ON_CLOSE);
 		pack();
