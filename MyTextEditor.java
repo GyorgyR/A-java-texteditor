@@ -1,3 +1,4 @@
+import java.awt.BorderLayout;
 import java.awt.Container;
 import java.awt.GridLayout;
 import java.awt.event.ActionListener;
@@ -5,6 +6,8 @@ import java.awt.event.ActionEvent;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.*;
+import java.awt.*;
 
 /*******************************************************************************
 Author: Gyorgy Rethy
@@ -17,4 +20,28 @@ public class MyTextEditor extends JFrame implements ActionListener
 	//This array holds everything that the user writes
 	private String[] input;
 	
+	private JMenuBar menubar;
+	
+	private JMenu file, help, credits;
+	
+	private JMenuItem open, save, exit;
+	
+	public MyTextEditor()
+	{
+		Container myContainer = getContentPane();
+		
+		JFrame frame = new JFrame();
+		
+		//Need a menubar
+		menuBar = new JMenuBar();
+		
+		//menus on the bar
+		//file
+		file = new JMenu("File");
+		
+		//Menu items in file
+		open = new JMenuItem("Open");
+		save = new JMenuItem("Save");
+		exit = new JMenuItem("Exit");
+	}
 }
