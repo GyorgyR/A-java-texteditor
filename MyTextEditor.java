@@ -28,9 +28,12 @@ public class MyTextEditor extends JFrame implements ActionListener
 	
 	public MyTextEditor()
 	{
+		setTitle("AWESOME text editor");
+		
 		Container myContainer = getContentPane();
 		
 		JFrame frame = new JFrame();
+		//myContainer.add(frame);
 		
 		//Need a menubar
 		menuBar = new JMenuBar();
@@ -38,15 +41,28 @@ public class MyTextEditor extends JFrame implements ActionListener
 		//menus on the bar
 		//file
 		file = new JMenu("File");
+		menuBar.add(file);
 		
 		//Menu items in file
 		open = new JMenuItem("Open");
+		file.add(open);
 		save = new JMenuItem("Save");
+		file.add(save);
 		exit = new JMenuItem("Exit");
+		file.add(exit);
+		
+		frame.setJMenuBar(menuBar);
+		
+		setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+		pack();
 	}
 	
 	public void actionPerformed(ActionEvent event)
 	{
 		
+	}
+	public static void main(String[] args)
+	{
+		new MyTextEditor().setVisible(true);
 	}
 }
