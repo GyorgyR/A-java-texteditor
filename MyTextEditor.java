@@ -20,7 +20,7 @@ public class MyTextEditor extends JFrame implements ActionListener
 	//This array holds everything that the user writes
 	private String[] input;
 	
-	private JMenuBar menubar;
+	private JMenuBar menuBar;
 	
 	private JMenu file, help, credits;
 	
@@ -43,5 +43,10 @@ public class MyTextEditor extends JFrame implements ActionListener
 		open = new JMenuItem("Open");
 		save = new JMenuItem("Save");
 		exit = new JMenuItem("Exit");
+	}
+	
+	public void actionPerformed(ActionEvent event)
+	{
+		
 	}
 }
