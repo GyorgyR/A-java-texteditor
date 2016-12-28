@@ -10,6 +10,7 @@ import javax.swing.JFrame;
 import javax.swing.JFileChooser;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
+import javax.swing.JCheckBoxMenuItem;
 import javax.swing.JMenu;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
@@ -30,16 +31,19 @@ public class MyTextEditor extends JFrame implements ActionListener
 	
 	//jmenus user can choose
 	//TODO options help credits
-	private JMenu file, options, help, credits;
+	private JMenu file, edit, options, help, credits;
 	
 	//jmenuitems in file
-	private JMenuItem open, save, saveas, exit;
+	private JMenuItem newfile, open, save, saveas, exit;
+	
+	//jmenuitems in options
+	private JCheckBoxMenuItem font, wrapLine, wrapStyle;
 	
 	//the jtextarea where the input is
 	private JTextArea textArea;
 	
 	
-	
+	//constructor
 	public MyTextEditor()
 	{
 		setTitle("AWESOME text editor - New File");
@@ -59,13 +63,25 @@ public class MyTextEditor extends JFrame implements ActionListener
 		//Need a menubar
 		menuBar = new JMenuBar();
 		
-		//menus on the bar
+		                /***********************
+		                   Menus on the bar
+		                ************************/
 		//file
 		file = new JMenu("File");
 		menuBar.add(file);
 		
-		//Menu items in file
-		//adding them to file and adding a action listener
+		//options
+		options = new JMenu("Options");
+		menuBar.add(options);
+		
+		                /***********************
+		                   Menu items in file
+		                ************************/
+		//new
+		newfile = new JMenuItem("New");
+		file.add(newfile);
+		newfile.addActionListener(this);
+		
 		//open
 		open = new JMenuItem("Open");
 		file.add(open);
@@ -86,15 +102,33 @@ public class MyTextEditor extends JFrame implements ActionListener
 		file.add(exit);
 		exit.addActionListener(this);
 		
+		                /**************************
+		                   Menu items in options
+		                ***************************/
+		//font
+		
+		
+		//wrapLine
+		wrapLine = new JCheckBoxMenuItem("Line Wrapping");
+		options.add(wrapLine);
+		wrapLine.addActionListener(this);
+		wrapLine.setState(textArea.getLineWrap());
+		
 		//setting the jmenubar
 		setJMenuBar(menuBar);
 		
 		setDefaultCloseOperation(DISPOSE_ON_CLOSE);
 		pack();
-	}
+	} //MyTextEditor constructor
 	
 	public void actionPerformed(ActionEvent event)
 	{
+	                /*************************************
+	                                FILE
+	                *************************************/
+	        if(event.getSource() == newfile)
+	                newFile();
+	                
 	        if(event.getSource() == open)
 	                open();
 	                
@@ -106,7 +140,19 @@ public class MyTextEditor extends JFrame implements ActionListener
 	                
 	        if(event.getSource() == exit)
 	                this.dispose();
-	}
+	        
+	                /*************************************
+	                               OPTIONS
+	                *************************************/
+	        if(event.getSource() == wrapLine)
+	                textArea.setLineWrap(wrapLine.getState());
+	} //actionPerformed
+	
+	//the function that starts a new file
+	public void newFile()
+	{
+	
+	} //newFile
 	
 	//the function that does save
 	public void save()
@@ -119,15 +165,15 @@ public class MyTextEditor extends JFrame implements ActionListener
 	                try(FileWriter writer = new FileWriter(currentFile))
 	                { 
 	                     textArea.write(writer);
-	                }
+	                } //try
 	                catch (Exception e)
 	                {
 	              
-	                }
-	        }
+	                } //catch
+	        } //else
 	        
 	        
-	}
+	} //save
 	
 	//the function that does save as
 	public void saveas()
@@ -144,13 +190,13 @@ public class MyTextEditor extends JFrame implements ActionListener
 	                                textArea.write(writer);
 	                                currentFile = fileBrowser.getSelectedFile();
 	                                setTitle("AWESOME text editor - "+currentFile.getName());
-	                        }
+	                        } //try
 	                      catch (Exception e)
 	                      {
 	              
-	                      }
-	                }
-	}
+	                      } //catch
+	                } //if
+	} //saveas
 	
 	public void open()
 	{
@@ -190,24 +236,24 @@ public class MyTextEditor extends JFrame implements ActionListener
 	                                textArea.append(line);
 	                                //read the next line
 	                                line = reader.readLine();
-	                        }
+	                        } //while
 	                        
 	                        
 	                        reader.close();
 	                        
 	                        setTitle("AWESOME text editor - "+currentFile.getName());
-	                }
+	                } //try
 	                catch(Exception e)
 	                {
 	                
-	                }
-	        }
+	                } //catch
+	        } //if
 	        
 	        
-	}
+	} //open
 	
 	public static void main(String[] args)
 	{
 		new MyTextEditor().setVisible(true);
-	}
-}
+	} //main
+} //MyTextEditor
