@@ -1,5 +1,7 @@
 import java.awt.BorderLayout;
+import java.awt.FlowLayout;
 import java.awt.Container;
+import java.awt.Font;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import java.io.File;
@@ -12,8 +14,11 @@ import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JCheckBoxMenuItem;
 import javax.swing.JMenu;
+import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
+import javax.swing.JTextField;
+import javax.swing.JLabel;
 
 /*******************************************************************************
 Author: Gyorgy Rethy
@@ -25,6 +30,9 @@ public class MyTextEditor extends JFrame implements ActionListener
 {
 	//This is the current file the user is working on
 	private File currentFile;
+	
+	//the current font
+	private JTextField fontSize;
 	
 	//just a jmenubar
 	private JMenuBar menuBar;
@@ -51,14 +59,8 @@ public class MyTextEditor extends JFrame implements ActionListener
 		Container myContainer = getContentPane();
 		myContainer.setLayout(new BorderLayout());
 		
-		
 		//initializing the text area 
 		textArea = new JTextArea(32, 80);
-		
-		//adding in the scroll pane
-		JScrollPane scrollPane = new JScrollPane(textArea);
-		myContainer.add(scrollPane,BorderLayout.CENTER);
-		
 		
 		//Need a menubar
 		menuBar = new JMenuBar();
@@ -73,6 +75,7 @@ public class MyTextEditor extends JFrame implements ActionListener
 		//options
 		options = new JMenu("Options");
 		menuBar.add(options);
+		
 		
 		                /***********************
 		                   Menu items in file
@@ -123,6 +126,24 @@ public class MyTextEditor extends JFrame implements ActionListener
 		//setting the jmenubar
 		setJMenuBar(menuBar);
 		
+		                /**************************
+		                        Second bar        
+		                ***************************/
+		JPanel secondBar = new JPanel(new FlowLayout(FlowLayout.LEFT));
+		myContainer.add(secondBar, BorderLayout.NORTH);
+		
+		//fontsize
+		JLabel fontLabel = new JLabel("Font size:");
+		secondBar.add(fontLabel);
+		
+		fontSize = new JTextField(""+textArea.getFont().getSize(),2);
+		fontSize.addActionListener(this);
+		secondBar.add(fontSize);
+		
+		//adding in the scroll pane
+		JScrollPane scrollPane = new JScrollPane(textArea);
+		myContainer.add(scrollPane,BorderLayout.CENTER);
+		
 		setDefaultCloseOperation(DISPOSE_ON_CLOSE);
 		pack();
 	} //MyTextEditor constructor
@@ -161,6 +182,13 @@ public class MyTextEditor extends JFrame implements ActionListener
 	        
 	        if(event.getSource() == wrapStyle)
 	                textArea.setWrapStyleWord(wrapStyle.getState());
+	        
+	                /************************************
+	                             SECOND BAR
+	                ************************************/
+	        if(event.getSource() == fontSize)
+	                textArea.setFont(
+	                  textArea.getFont().deriveFont(Float.parseFloat(fontSize.getText())));
 	        
 	} //actionPerformed
 	
@@ -201,7 +229,8 @@ public class MyTextEditor extends JFrame implements ActionListener
 	        
 	                if(returnValue == JFileChooser.APPROVE_OPTION)
 	                {
-	                      try(FileWriter writer = new FileWriter(fileBrowser.getSelectedFile()))
+	                      try(FileWriter writer = new FileWriter
+	                                        (fileBrowser.getSelectedFile()))
 	                        { 
 	                                textArea.write(writer);
 	                                currentFile = fileBrowser.getSelectedFile();
