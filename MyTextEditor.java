@@ -37,7 +37,7 @@ public class MyTextEditor extends JFrame implements ActionListener
 	private JMenuItem newfile, open, save, saveas, exit;
 	
 	//jmenuitems in options
-	private JCheckBoxMenuItem font, wrapLine, wrapStyle;
+	private JCheckBoxMenuItem wrapLine, wrapStyle;
 	
 	//the jtextarea where the input is
 	private JTextArea textArea;
@@ -114,6 +114,12 @@ public class MyTextEditor extends JFrame implements ActionListener
 		wrapLine.addActionListener(this);
 		wrapLine.setState(textArea.getLineWrap());
 		
+		//wrap style
+		wrapStyle = new JCheckBoxMenuItem("Wrap Words");
+		options.add(wrapStyle);
+		wrapStyle.addActionListener(this);
+		wrapStyle.setEnabled(false);
+		
 		//setting the jmenubar
 		setJMenuBar(menuBar);
 		
@@ -128,16 +134,16 @@ public class MyTextEditor extends JFrame implements ActionListener
 	                *************************************/
 	        if(event.getSource() == newfile)
 	                newFile();
-	                
+	       
 	        if(event.getSource() == open)
 	                open();
-	                
+	       
 	        if(event.getSource() == save)
 	                save();
-	                
+	       
 	        if(event.getSource() == saveas)
 	                saveas();
-	                
+	       
 	        if(event.getSource() == exit)
 	                this.dispose();
 	        
@@ -145,7 +151,17 @@ public class MyTextEditor extends JFrame implements ActionListener
 	                               OPTIONS
 	                *************************************/
 	        if(event.getSource() == wrapLine)
+	        {
 	                textArea.setLineWrap(wrapLine.getState());
+	                if(textArea.getLineWrap())
+	                        wrapStyle.setEnabled(true);
+	                else
+	                        wrapStyle.setEnabled(false);
+	        }
+	        
+	        if(event.getSource() == wrapStyle)
+	                textArea.setWrapStyleWord(wrapStyle.getState());
+	        
 	} //actionPerformed
 	
 	//the function that starts a new file
