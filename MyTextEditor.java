@@ -38,18 +38,13 @@ public class MyTextEditor extends JFrame implements ActionListener
 
   //jmenus user can choose
   //TODO options help credits
-  private JMenu file, edit, options, help, credits;
+  private JMenu file, edit, help, credits;
 
   //jmenuitems in file
   private JMenuItem newfile, open, save, saveas, exit;
 
-  //jmenuitems in options
-  private JCheckBoxMenuItem wrapLine, wrapStyle;
-  //the current font size
-  private JTextField fontSize;
-  //the current font
-  private JComboBox<Font> fontType;
-  private String fontDir = "Fonts";
+  //jmenuitems in edit
+  private JMenuItem options;
 
   //the jtextarea where the input is
   private JTextArea textArea;
@@ -76,9 +71,9 @@ public class MyTextEditor extends JFrame implements ActionListener
     file = new JMenu("File");
     menuBar.add(file);
 
-    //options
-    options = new JMenu("Options");
-    menuBar.add(options);
+    //edit
+    edit = new JMenu("Edit");
+    menuBar.add(edit);
 
                     /***********************
                         Menu items in file
@@ -107,39 +102,15 @@ public class MyTextEditor extends JFrame implements ActionListener
     exit = new JMenuItem("Exit");
     file.add(exit);
     exit.addActionListener(this);
-    
+
                     /**************************
-                       Menu items in options
+                       Menu items in edit
                     ***************************/
-    //font
-    JPanel secondBar = new JPanel(new FlowLayout(FlowLayout.LEFT));
-    options.add(secondBar);
-    //fontsize
-    JLabel fontLabel = new JLabel("Font size:");
-    secondBar.add(fontLabel);
-    fontSize = new JTextField(""+textArea.getFont().getSize(),2);
-    fontSize.addActionListener(this);
-    secondBar.add(fontSize);
-    //font type
-    GraphicsEnvironment e = GraphicsEnvironment.getLocalGraphicsEnvironment();
-    Font[] fonts = e.getAllFonts();
-    fontType = new JComboBox<Font>(fonts);
-    ComboBoxRendererFont fontRenderer = new ComboBoxRendererFont();
-    fontType.setRenderer(fontRenderer);
-    options.add(fontType);
-    
-    //wrapLine
-    wrapLine = new JCheckBoxMenuItem("Line Wrapping");
-    options.add(wrapLine);
-    wrapLine.addActionListener(this);
-    wrapLine.setState(textArea.getLineWrap());
-    
-    //wrap style
-    wrapStyle = new JCheckBoxMenuItem("Wrap Words");
-    options.add(wrapStyle);
-    wrapStyle.addActionListener(this);
-    wrapStyle.setEnabled(false);
-    
+    //options
+    options = new JMenuItem("Options");
+    options.addActionListener(this);
+    edit.add(options);
+
     //setting the jmenubar
     setJMenuBar(menuBar);
     
@@ -172,23 +143,13 @@ public class MyTextEditor extends JFrame implements ActionListener
       this.dispose();
    
             /*************************************
-                          OPTIONS
+                          EDIT
             *************************************/
-    if(event.getSource() == wrapLine)
-    {
-      textArea.setLineWrap(wrapLine.getState());
-      if(textArea.getLineWrap())
-        wrapStyle.setEnabled(true);
-      else
-        wrapStyle.setEnabled(false);
-    }
 
-    if(event.getSource() == wrapStyle)
-      textArea.setWrapStyleWord(wrapStyle.getState());
-
-    if(event.getSource() == fontSize)
-      textArea.setFont(textArea.getFont().deriveFont(Float.parseFloat(fontSize.getText())));
-
+    if(event.getSource() == options)
+      new Options(textArea).setVisible(true);
+    /*
+    */
     } //actionPerformed
     
   //the function that starts a new file

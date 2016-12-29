@@ -1,6 +1,6 @@
-package net.codejava.swing.combobox;
 
 import java.awt.*;
+import java.awt.event.*;
 import javax.swing.*;
 /*********************************************************
 Author: Gyorgy Rethy
@@ -10,23 +10,21 @@ This is a custom renderer for the font JComboBox
 *********************************************************/
 public class ComboBoxRendererFont extends JLabel implements ListCellRenderer
 {
+	private JLabel labelItem = new JLabel();
 	public ComboBoxRendererFont() 
 	{
     	setOpaque(true);
     }
 
-	public Component getListCellRendererComponent(JList list,
-	                                              Object value,
-	                                              int index,
-	                                              boolean isSelected,
-	                                              boolean cellHasFocus)
-	{
-
-		//int selectedItem = ((Integer)value).intValue();
-
-		String fontType = value.toString();
-		setText(fontType);
-		return this;
-	}
+	@Override
+    public Component getListCellRendererComponent(JList list, Object value,
+            int index, boolean isSelected, boolean cellHasFocus)
+    {
+        Font fonts = (Font) value;
+        String textOnLabel = fonts.getFontName();
+        //labelItem.setText(textOnLabel);
+        setText(textOnLabel);
+        return this;
+    }
 		
 }
