@@ -1,6 +1,7 @@
 import java.awt.BorderLayout;
 import java.awt.FlowLayout;
 import java.awt.Container;
+import java.awt.GraphicsEnvironment;
 import java.awt.Font;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
@@ -8,6 +9,7 @@ import java.io.File;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.FileWriter;
+import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JFileChooser;
 import javax.swing.JMenuBar;
@@ -31,9 +33,6 @@ public class MyTextEditor extends JFrame implements ActionListener
   //This is the current file the user is working on
   private File currentFile;
 
-  //the current font
-  private JTextField fontSize;
-
   //just a jmenubar
   private JMenuBar menuBar;
 
@@ -46,6 +45,11 @@ public class MyTextEditor extends JFrame implements ActionListener
 
   //jmenuitems in options
   private JCheckBoxMenuItem wrapLine, wrapStyle;
+  //the current font size
+  private JTextField fontSize;
+  //the current font
+  private JComboBox<Font> fontType;
+  private String fontDir = "Fonts";
 
   //the jtextarea where the input is
   private JTextArea textArea;
@@ -116,6 +120,13 @@ public class MyTextEditor extends JFrame implements ActionListener
     fontSize = new JTextField(""+textArea.getFont().getSize(),2);
     fontSize.addActionListener(this);
     secondBar.add(fontSize);
+    //font type
+    GraphicsEnvironment e = GraphicsEnvironment.getLocalGraphicsEnvironment();
+    Font[] fonts = e.getAllFonts();
+    fontType = new JComboBox<Font>(fonts);
+    ComboBoxRendererFont fontRenderer = new ComboBoxRendererFont();
+    fontType.setRenderer(fontRenderer);
+    options.add(fontType);
     
     //wrapLine
     wrapLine = new JCheckBoxMenuItem("Line Wrapping");
@@ -174,10 +185,7 @@ public class MyTextEditor extends JFrame implements ActionListener
 
     if(event.getSource() == wrapStyle)
       textArea.setWrapStyleWord(wrapStyle.getState());
-            
-            /************************************
-                        SECOND BAR
-            ************************************/
+
     if(event.getSource() == fontSize)
       textArea.setFont(textArea.getFont().deriveFont(Float.parseFloat(fontSize.getText())));
 
