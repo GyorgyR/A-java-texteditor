@@ -148,8 +148,6 @@ public class MyTextEditor extends JFrame implements ActionListener
 
     if(event.getSource() == options)
       new Options(textArea).setVisible(true);
-    /*
-    */
     } //actionPerformed
     
   //the function that starts a new file
