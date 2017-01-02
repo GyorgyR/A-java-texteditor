@@ -189,10 +189,7 @@ public class MyTextEditor extends JFrame implements ActionListener, KeyListener
 
   //keyPressed
   public void keyPressed(KeyEvent e) {
-  	int key = e.getKeyCode();
-  	if(key == KeyEvent.VK_ENTER && displayLineNumbersBox.getState()) {
-  		displayLineNumbers();
-  	} // if
+  	displayLineNumbers();
   } // keyPressed
   public void keyReleased(KeyEvent e) {
 
