@@ -204,7 +204,7 @@ public class MyTextEditor extends JFrame implements ActionListener, KeyListener
   	displayLineNumbers();
   } // keyReleased
   public void keyTyped(KeyEvent e){
-
+  	displayLineNumbers();
   } // keyTyped
 
     
