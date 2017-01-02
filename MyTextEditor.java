@@ -1,11 +1,14 @@
 import java.awt.BorderLayout;
 import java.awt.FlowLayout;
+import java.awt.GridLayout;
 import java.awt.Container;
 import java.awt.Dimension;
 import java.awt.GraphicsEnvironment;
 import java.awt.Font;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
+import java.awt.event.KeyListener;
+import java.awt.event.KeyEvent;
 import java.io.File;
 import java.io.BufferedReader;
 import java.io.FileReader;
@@ -30,7 +33,7 @@ Date: 27/12/2016
 --------------------------------------------------------------------------------
 This a simple java text editor so I will not forget everything that I learned.
 *******************************************************************************/
-public class MyTextEditor extends JFrame implements ActionListener
+public class MyTextEditor extends JFrame implements ActionListener, KeyListener
 {
   //This is the current file the user is working on
   private File currentFile;
@@ -47,10 +50,15 @@ public class MyTextEditor extends JFrame implements ActionListener
 
   //jmenuitems in edit
   private JMenuItem options;
+  private JCheckBoxMenuItem displayLineNumbersBox;
 
   //the jtextarea where the input is
   private JTextArea textArea;
 
+  //JPanle to hold labels for line numbers
+  private JTextArea lineNumbers;
+
+  private int currentLineCount;
 
   //constructor
   public MyTextEditor()
@@ -114,6 +122,15 @@ public class MyTextEditor extends JFrame implements ActionListener
                     /**************************
                        Menu items in edit
                     ***************************/
+    //line numbering
+    // a JPanel for linenumber labels
+    lineNumbers = new JTextArea();
+    lineNumbers.setEnabled(false);
+    myContainer.add(lineNumbers,BorderLayout.WEST);
+    displayLineNumbersBox = new JCheckBoxMenuItem("Display Line Numbers");
+    displayLineNumbersBox.addActionListener(this);
+    edit.add(displayLineNumbersBox);
+
     //options
     options = new JMenuItem("Options");
     options.addActionListener(this);
@@ -124,11 +141,13 @@ public class MyTextEditor extends JFrame implements ActionListener
     
     //initializing the text area 
     textArea = new JTextArea(30,80);
+    textArea.addKeyListener(this);
+    currentLineCount = textArea.getLineCount();
 
     //adding in the scroll pane
     JScrollPane scrollPane = new JScrollPane(textArea);
     myContainer.add(scrollPane,BorderLayout.CENTER);
-    
+
     //making adjustments to the widow before opening
     textArea.setFont(textArea.getFont().deriveFont(16.0f));
     //myContainer.setPreferredSize(new Dimension(600,800));
@@ -161,9 +180,27 @@ public class MyTextEditor extends JFrame implements ActionListener
                           EDIT
             *************************************/
 
+    if(event.getSource() == displayLineNumbersBox)
+    	displayLineNumbers();
+
     if(event.getSource() == options)
-      new Options(textArea).setVisible(true);
-    } //actionPerformed
+    	new Options(textArea).setVisible(true);
+  } //actionPerformed
+
+  //keyPressed
+  public void keyPressed(KeyEvent e) {
+  	int key = e.getKeyCode();
+  	if(key == KeyEvent.VK_ENTER && displayLineNumbersBox.getState()) {
+  		displayLineNumbers();
+  	} // if
+  } // keyPressed
+  public void keyReleased(KeyEvent e) {
+
+  } // keyReleased
+  public void keyTyped(KeyEvent e){
+
+  } // keyTyped
+
     
   //the function that starts a new file
   public void newFile()
@@ -266,6 +303,28 @@ public class MyTextEditor extends JFrame implements ActionListener
     } //if
     
   } //open
+
+  public void displayLineNumbers() {
+  	if(displayLineNumbersBox.getState()) {
+  		//set the textarea 
+  		lineNumbers.setColumns(1);
+  		lineNumbers.setFont(textArea.getFont());
+  		lineNumbers.setText("");
+
+  		//add numbers to the text area
+    	for(int lineNumber = 1 ; lineNumber <= textArea.getLineCount()+1; lineNumber++)
+    		lineNumbers.append(""+lineNumber+"\n");
+    	currentLineCount = textArea.getLineCount();
+	}
+	else {
+		//set text to nothing and shrink it down to zero
+		lineNumbers.setText("");
+		lineNumbers.setColumns(0);
+	}
+
+	pack();
+
+  } // displayLineNumbers
   
   public static void main(String[] args)
   {

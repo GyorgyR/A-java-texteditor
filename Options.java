@@ -10,7 +10,7 @@ This is the Options screen in MyTextEditor
 public class Options extends JFrame implements ActionListener
 {
 	//jmenuitems in options
-  	private JCheckBox wrapLine, wrapStyle;
+  	private JCheckBox wrapLine, wrapStyle, displayLineNumbersBox;
   	//the current font size
   	private JTextField fontSize, tabSize;
   	//the current font
