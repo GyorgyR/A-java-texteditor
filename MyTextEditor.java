@@ -59,7 +59,7 @@ public class MyTextEditor extends JFrame implements ActionListener
     myContainer.setLayout(new BorderLayout());
 
     //initializing the text area 
-    textArea = new JTextArea(32, 80);
+    textArea = new JTextArea();
 
     //Need a menubar
     menuBar = new JMenuBar();
@@ -118,6 +118,7 @@ public class MyTextEditor extends JFrame implements ActionListener
     JScrollPane scrollPane = new JScrollPane(textArea);
     myContainer.add(scrollPane,BorderLayout.CENTER);
     
+    setSize(600,800);
     setDefaultCloseOperation(DISPOSE_ON_CLOSE);
     pack();
   } //MyTextEditor constructor
