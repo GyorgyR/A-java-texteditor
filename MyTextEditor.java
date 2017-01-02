@@ -7,6 +7,7 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.GraphicsEnvironment;
 import java.awt.Font;
+import java.awt.Rectangle;
 import java.awt.geom.Line2D;
 import java.awt.geom.Line2D.Float;
 import java.awt.event.ActionListener;
@@ -161,7 +162,6 @@ public class MyTextEditor extends JFrame implements ActionListener, KeyListener
     textArea.setFont(textArea.getFont().deriveFont(16.0f));
     myContainer.setPreferredSize(new Dimension(600,800));
     setDefaultCloseOperation(DISPOSE_ON_CLOSE);
-    pack();
     pack();
   } //MyTextEditor constructor
   
@@ -334,6 +334,8 @@ public class MyTextEditor extends JFrame implements ActionListener, KeyListener
 		lineNumbers.setColumns(0);
 	}
 	
+	Rectangle r = this.getBounds();
+	this.setPreferredSize(new Dimension(r.width,r.height));
 	pack();
 
   } // displayLineNumbers
