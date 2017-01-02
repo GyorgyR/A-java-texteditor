@@ -1,6 +1,7 @@
 import java.awt.BorderLayout;
 import java.awt.FlowLayout;
 import java.awt.Container;
+import java.awt.Dimension;
 import java.awt.GraphicsEnvironment;
 import java.awt.Font;
 import java.awt.event.ActionListener;
@@ -21,6 +22,7 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.JLabel;
+import javax.swing.UIManager;
 
 /*******************************************************************************
 Author: Gyorgy Rethy
@@ -53,13 +55,19 @@ public class MyTextEditor extends JFrame implements ActionListener
   //constructor
   public MyTextEditor()
   {
+  	try
+  	{
+  		UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+  	}
+  	catch(Exception e)
+  	{
+  		e.printStackTrace();
+  	}
+
     setTitle("AWESOME text editor - New File");
 
     Container myContainer = getContentPane();
     myContainer.setLayout(new BorderLayout());
-
-    //initializing the text area 
-    textArea = new JTextArea();
 
     //Need a menubar
     menuBar = new JMenuBar();
@@ -114,12 +122,18 @@ public class MyTextEditor extends JFrame implements ActionListener
     //setting the jmenubar
     setJMenuBar(menuBar);
     
+    //initializing the text area 
+    textArea = new JTextArea(30,80);
+
     //adding in the scroll pane
     JScrollPane scrollPane = new JScrollPane(textArea);
     myContainer.add(scrollPane,BorderLayout.CENTER);
     
-    setSize(600,800);
+    //making adjustments to the widow before opening
+    textArea.setFont(textArea.getFont().deriveFont(16.0f));
+    //myContainer.setPreferredSize(new Dimension(600,800));
     setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+    pack();
     pack();
   } //MyTextEditor constructor
   

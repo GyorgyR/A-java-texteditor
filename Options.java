@@ -12,7 +12,7 @@ public class Options extends JFrame implements ActionListener
 	//jmenuitems in options
   	private JCheckBox wrapLine, wrapStyle;
   	//the current font size
-  	private JTextField fontSize;
+  	private JTextField fontSize, tabSize;
   	//the current font
   	private JComboBox<Font> fontType;
   	private String fontDir = "Fonts";
@@ -34,8 +34,14 @@ public class Options extends JFrame implements ActionListener
 		JPanel wrap = new JPanel();
 		wrap.setLayout(new GridLayout(0,1));
 
+		//tab for other options
+		JPanel other = new JPanel();
+		other.setLayout(new GridLayout(1,0));
+
+		//adding JPanels to the tabbedpane as tabs
 		tabbedPane.addTab("Font",font);
 		tabbedPane.addTab("Wrap",wrap);
+		tabbedPane.addTab("Other",other);
 
 		//fontsize
 		JLabel fontLabel = new JLabel("Font size:");
@@ -66,6 +72,13 @@ public class Options extends JFrame implements ActionListener
     	wrapStyle.addActionListener(this);
     	wrapStyle.setEnabled(false);
 
+    	//tab size
+    	other.add(new JLabel("Tab Size: "));
+    	tabSize = new JTextField(""+textArea.getTabSize());
+    	tabSize.setSize(new Dimension(1,1));
+    	other.add(tabSize);
+    	tabSize.addActionListener(this);
+
 		setDefaultCloseOperation(DISPOSE_ON_CLOSE);
     	pack();
 	} //Options constructor
@@ -94,7 +107,10 @@ public class Options extends JFrame implements ActionListener
 
     if(event.getSource() == fontSize)
     	textArea.setFont(textArea.getFont().deriveFont(Float.parseFloat(fontSize.getText())));
-	}
+
+    if(event.getSource() == tabSize)
+    	textArea.setTabSize(Integer.parseInt(tabSize.getText()));
+	} // actionPerformed
 } //Options
 
 //font
