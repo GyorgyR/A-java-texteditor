@@ -3,8 +3,12 @@ import java.awt.FlowLayout;
 import java.awt.GridLayout;
 import java.awt.Container;
 import java.awt.Dimension;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
 import java.awt.GraphicsEnvironment;
 import java.awt.Font;
+import java.awt.geom.Line2D;
+import java.awt.geom.Line2D.Float;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyListener;
@@ -58,7 +62,8 @@ public class MyTextEditor extends JFrame implements ActionListener, KeyListener
   //JPanle to hold labels for line numbers
   private JTextArea lineNumbers;
 
-  private int currentLineCount;
+  //a line separating textareas where line numbers are shown
+  private Line2D verticalLineBetweentextAreas;
 
   //constructor
   public MyTextEditor()
@@ -126,7 +131,6 @@ public class MyTextEditor extends JFrame implements ActionListener, KeyListener
     // a JPanel for linenumber labels
     lineNumbers = new JTextArea();
     lineNumbers.setEnabled(false);
-    myContainer.add(lineNumbers,BorderLayout.WEST);
     displayLineNumbersBox = new JCheckBoxMenuItem("Display Line Numbers");
     displayLineNumbersBox.addActionListener(this);
     edit.add(displayLineNumbersBox);
@@ -140,17 +144,22 @@ public class MyTextEditor extends JFrame implements ActionListener, KeyListener
     setJMenuBar(menuBar);
     
     //initializing the text area 
-    textArea = new JTextArea(30,80);
+    textArea = new JTextArea(30,20);
     textArea.addKeyListener(this);
-    currentLineCount = textArea.getLineCount();
+
+    //Jpanel to hold the line numbers and the textarea
+    JPanel scrollabletextAreas = new JPanel();
+    scrollabletextAreas.setLayout(new BorderLayout());
+    scrollabletextAreas.add(lineNumbers, BorderLayout.WEST);
+    scrollabletextAreas.add(textArea, BorderLayout.CENTER);
 
     //adding in the scroll pane
-    JScrollPane scrollPane = new JScrollPane(textArea);
+    JScrollPane scrollPane = new JScrollPane(scrollabletextAreas);
     myContainer.add(scrollPane,BorderLayout.CENTER);
 
     //making adjustments to the widow before opening
     textArea.setFont(textArea.getFont().deriveFont(16.0f));
-    //myContainer.setPreferredSize(new Dimension(600,800));
+    myContainer.setPreferredSize(new Dimension(600,800));
     setDefaultCloseOperation(DISPOSE_ON_CLOSE);
     pack();
     pack();
@@ -192,7 +201,7 @@ public class MyTextEditor extends JFrame implements ActionListener, KeyListener
   	displayLineNumbers();
   } // keyPressed
   public void keyReleased(KeyEvent e) {
-
+  	displayLineNumbers();
   } // keyReleased
   public void keyTyped(KeyEvent e){
 
@@ -304,21 +313,27 @@ public class MyTextEditor extends JFrame implements ActionListener, KeyListener
   public void displayLineNumbers() {
   	if(displayLineNumbersBox.getState()) {
   		//set the textarea 
-  		lineNumbers.setColumns(1);
+  		lineNumbers.setColumns(3);
   		lineNumbers.setFont(textArea.getFont());
   		lineNumbers.setText("");
 
   		//add numbers to the text area
-    	for(int lineNumber = 1 ; lineNumber <= textArea.getLineCount()+1; lineNumber++)
-    		lineNumbers.append(""+lineNumber+"\n");
-    	currentLineCount = textArea.getLineCount();
+  		if(textArea.getLineCount() < 100)
+    		for(int lineNumber = 1 ; lineNumber <= textArea.getLineCount(); lineNumber++)
+    			lineNumbers.append(String.format("%3d %n",lineNumber));
+    	else if (textArea.getLineCount() < 1000)
+    		for(int lineNumber = 1 ; lineNumber <= textArea.getLineCount(); lineNumber++)
+    			lineNumbers.append(String.format("%4d %n",lineNumber));
+    	else
+    		for(int lineNumber = 1 ; lineNumber <= textArea.getLineCount(); lineNumber++)
+    			lineNumbers.append(String.format("%5d %n",lineNumber));
 	}
 	else {
 		//set text to nothing and shrink it down to zero
 		lineNumbers.setText("");
 		lineNumbers.setColumns(0);
 	}
-
+	
 	pack();
 
   } // displayLineNumbers

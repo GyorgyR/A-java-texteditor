@@ -87,29 +87,29 @@ public class Options extends JFrame implements ActionListener
 	public void actionPerformed(ActionEvent event)
 	{
 		//TODO
-	if(event.getSource() == wrapLine)
-    {
-    	textArea.setLineWrap(wrapLine.isSelected());
-    	if(textArea.getLineWrap())
-    		wrapStyle.setEnabled(true);
-    	else
-        	wrapStyle.setEnabled(false);
-    }
+		if(event.getSource() == wrapLine)
+    	{
+    		textArea.setLineWrap(wrapLine.isSelected());
+    		if(textArea.getLineWrap())
+    			wrapStyle.setEnabled(true);
+    		else
+        		wrapStyle.setEnabled(false);
+    	}
 
-    if(event.getSource() == wrapStyle)
-    	textArea.setWrapStyleWord(wrapStyle.isSelected());
+    	if(event.getSource() == wrapStyle)
+    		textArea.setWrapStyleWord(wrapStyle.isSelected());
 
-    if(event.getSource() == fontType)
-    {
-    	Font f = (Font) fontType.getSelectedItem();
-    	textArea.setFont(f.deriveFont(Float.parseFloat(fontSize.getText())));
-    }
+    	if(event.getSource() == fontType)
+    	{
+    		Font f = (Font) fontType.getSelectedItem();
+    		textArea.setFont(f.deriveFont(Float.parseFloat(fontSize.getText())));
+    	}
 
-    if(event.getSource() == fontSize)
-    	textArea.setFont(textArea.getFont().deriveFont(Float.parseFloat(fontSize.getText())));
+    	if(event.getSource() == fontSize)
+    		textArea.setFont(textArea.getFont().deriveFont(Float.parseFloat(fontSize.getText())));
 
-    if(event.getSource() == tabSize)
-    	textArea.setTabSize(Integer.parseInt(tabSize.getText()));
+    	if(event.getSource() == tabSize)
+    		textArea.setTabSize(Integer.parseInt(tabSize.getText()));
 	} // actionPerformed
 } //Options
 
