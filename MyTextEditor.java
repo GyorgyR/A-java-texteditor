@@ -32,6 +32,7 @@ import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.JLabel;
 import javax.swing.UIManager;
+import java.util.ArrayList;
 
 /*******************************************************************************
 Author: Gyorgy Rethy
@@ -66,6 +67,7 @@ public class MyTextEditor extends JFrame implements ActionListener, KeyListener
 
   //options variables
   public boolean isAutoIndentOn;
+  private float fontSizes = 14.0f;
 
 
   //the jtextarea where the input is
@@ -99,7 +101,7 @@ public class MyTextEditor extends JFrame implements ActionListener, KeyListener
     menuBar = new JMenuBar();
 
     //tweak UIManager settings
-    UIManager.put("Menu.font",menuBar.getFont().deriveFont(20.0f));
+    UIManager.put("Menu.font",menuBar.getFont().deriveFont(fontSizes));
     UIManager.put("TextArea.background",initBackgroundColor);
     UIManager.put("TextArea.disabledBackground", Color.GRAY);
     UIManager.put("TextArea.foreground",initForeGroundColor);
@@ -151,7 +153,7 @@ public class MyTextEditor extends JFrame implements ActionListener, KeyListener
     // a JPanel for linenumber labels
     lineNumbers = new JTextArea();
     lineNumbers.setEnabled(false);
-    lineNumbers.setFont(lineNumbers.getFont().deriveFont(20.0f));
+    lineNumbers.setFont(lineNumbers.getFont().deriveFont(fontSizes));
     displayLineNumbersBox = new JCheckBoxMenuItem("Display Line Numbers");
     displayLineNumbersBox.addActionListener(this);
     edit.add(displayLineNumbersBox);
@@ -184,7 +186,7 @@ public class MyTextEditor extends JFrame implements ActionListener, KeyListener
     myContainer.add(scrollPane,BorderLayout.CENTER);
 
     //making adjustments to the widow before opening
-    textArea.setFont(textArea.getFont().deriveFont(20.0f));
+    textArea.setFont(textArea.getFont().deriveFont(fontSizes));
     //textArea.setBackground(initBackgroundColor);
     //textArea.setForeground(initForeGroundColor);
     myContainer.setPreferredSize(new Dimension(600,800));
@@ -250,19 +252,18 @@ public class MyTextEditor extends JFrame implements ActionListener, KeyListener
   		hasChangeInTextSinceLastSave = true;
   } // keyPressed
   public void keyReleased(KeyEvent e) {
-  	//displayLineNumbers();
+  	if(newText != null) {
+      oldText = newText;
+    } else
+      hasChangeInTextSinceLastSave = false;
+    newText = textArea.getText().split("\\n", -1);
+    setChangeInText();
   } // keyReleased
   public void keyTyped(KeyEvent e){
   	if(e.getKeyChar() == '\n') {
   		autoIndent();
   	}
-  	if(newText != null) {
-  		oldText = newText;
-  	} else
-  		hasChangeInTextSinceLastSave = false;
-  	newText = textArea.getText().split("\n");
   	displayLineNumbers();
-  	setChangeInText();
   } // keyTyped
 
   //the function that does the has text changed
@@ -276,21 +277,38 @@ public class MyTextEditor extends JFrame implements ActionListener, KeyListener
   //the function that does the auto indent
   public void autoIndent() {
   	if(isAutoIndentOn) {
-  		//string that will hold the last line
-  		String prevLastLine;
+        int lineNum = 0;
+        try {
+            //we calculate where the caret is
+            //by calculating the offset of the caret and then calculating which line is that
+            lineNum = textArea.getLineOfOffset(textArea.getCaretPosition());
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+        }  
+  	    //string that holds the previous line
+  	    String prevLastLine = newText[lineNum-1];
 
-  		//if it is the first line we write oldText is null so we use newText
-  		if(oldText == null)
-  			prevLastLine = newText[newText.length-1];
-  		else
-  			prevLastLine = oldText[oldText.length-1];
-  		int whitespaces = 0;
+        //boolean because we only get characters from the beginning of the line
+        boolean isGettingWhiteSpaces = true;
+
+        //this array list will hold the whitespace characters
+  		ArrayList<Character> whitespaces = new ArrayList<Character>();
+
+        //iterating through last line to and collecting whitespaces until something else is found
   		for(int index = 0; index < prevLastLine.length(); index++) {
   			char c = prevLastLine.charAt(index);
-  			if(Character.isWhitespace(c))
-  				whitespaces++;
+  			if(Character.isWhitespace(c) && isGettingWhiteSpaces)
+  				whitespaces.add(c);
+        else
+          isGettingWhiteSpaces = false;
   		}
-  		textArea.append(prevLastLine);
+        //we build the string representation of the whitespace
+        String whitespacesToInsert = "";
+  		for(char whitespace : whitespaces)
+            whitespacesToInsert += whitespace;
+        textArea.insert(whitespacesToInsert, textArea.getCaretPosition());
+
   	} //if
   } // autoIndent
     
