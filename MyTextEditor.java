@@ -1,6 +1,7 @@
 import java.awt.BorderLayout;
 import java.awt.FlowLayout;
 import java.awt.GridLayout;
+import java.awt.Color;
 import java.awt.Container;
 import java.awt.Dimension;
 import java.awt.Graphics;
@@ -41,7 +42,12 @@ This a simple java text editor so I will not forget everything that I learned.
 public class MyTextEditor extends JFrame implements ActionListener, KeyListener
 {
   //This is the current file the user is working on
-  private File currentFile;
+  private static File currentFile;
+
+  //variables about the text
+  private boolean hasChangeInTextSinceLastSave;
+  private String[] oldText;
+  private String[] newText;
 
   //just a jmenubar
   private JMenuBar menuBar;
@@ -56,6 +62,11 @@ public class MyTextEditor extends JFrame implements ActionListener, KeyListener
   //jmenuitems in edit
   private JMenuItem options;
   private JCheckBoxMenuItem displayLineNumbersBox;
+  private JCheckBoxMenuItem autoIndent;
+
+  //options variables
+  public boolean isAutoIndentOn;
+
 
   //the jtextarea where the input is
   private JTextArea textArea;
@@ -63,8 +74,9 @@ public class MyTextEditor extends JFrame implements ActionListener, KeyListener
   //JPanle to hold labels for line numbers
   private JTextArea lineNumbers;
 
-  //a line separating textareas where line numbers are shown
-  private Line2D verticalLineBetweentextAreas;
+  //Colours used in the application
+  Color initBackgroundColor = new Color(5,30,65);
+  Color initForeGroundColor = new Color(236,238,225);
 
   //constructor
   public MyTextEditor()
@@ -86,6 +98,13 @@ public class MyTextEditor extends JFrame implements ActionListener, KeyListener
     //Need a menubar
     menuBar = new JMenuBar();
 
+    //tweak UIManager settings
+    UIManager.put("Menu.font",menuBar.getFont().deriveFont(20.0f));
+    UIManager.put("TextArea.background",initBackgroundColor);
+    UIManager.put("TextArea.disabledBackground", Color.GRAY);
+    UIManager.put("TextArea.foreground",initForeGroundColor);
+    UIManager.put("TextArea.caretForeground",initForeGroundColor);
+
                      /***********************
                         Menus on the bar
                     ************************/
@@ -101,22 +120,22 @@ public class MyTextEditor extends JFrame implements ActionListener, KeyListener
                         Menu items in file
                     ************************/
     //new
-    newfile = new JMenuItem("New");
+    newfile = new JMenuItem("New File");
     file.add(newfile);
     newfile.addActionListener(this);
     
     //open
-    open = new JMenuItem("Open");
+    open = new JMenuItem("Open File...");
     file.add(open);
     open.addActionListener(this);
     
     //save
-    save = new JMenuItem("Save");
+    save = new JMenuItem("Save File");
     file.add(save);
     save.addActionListener(this);
     
     //save as..
-    saveas = new JMenuItem("Save as..");
+    saveas = new JMenuItem("Save File as..");
     file.add(saveas);
     saveas.addActionListener(this);
     
@@ -132,9 +151,15 @@ public class MyTextEditor extends JFrame implements ActionListener, KeyListener
     // a JPanel for linenumber labels
     lineNumbers = new JTextArea();
     lineNumbers.setEnabled(false);
+    lineNumbers.setFont(lineNumbers.getFont().deriveFont(20.0f));
     displayLineNumbersBox = new JCheckBoxMenuItem("Display Line Numbers");
     displayLineNumbersBox.addActionListener(this);
     edit.add(displayLineNumbersBox);
+
+    //auto indentation
+    autoIndent = new JCheckBoxMenuItem("Auto Indent");
+    autoIndent.addActionListener(this);
+    edit.add(autoIndent);
 
     //options
     options = new JMenuItem("Options");
@@ -159,10 +184,18 @@ public class MyTextEditor extends JFrame implements ActionListener, KeyListener
     myContainer.add(scrollPane,BorderLayout.CENTER);
 
     //making adjustments to the widow before opening
-    textArea.setFont(textArea.getFont().deriveFont(16.0f));
+    textArea.setFont(textArea.getFont().deriveFont(20.0f));
+    //textArea.setBackground(initBackgroundColor);
+    //textArea.setForeground(initForeGroundColor);
     myContainer.setPreferredSize(new Dimension(600,800));
     setDefaultCloseOperation(DISPOSE_ON_CLOSE);
     pack();
+
+    //this is where I will load in the settings
+    //now I just initialize variables
+    isAutoIndentOn = false;
+    autoIndent.setState(isAutoIndentOn);
+    hasChangeInTextSinceLastSave = false;
   } //MyTextEditor constructor
   
   public void actionPerformed(ActionEvent event)
@@ -173,8 +206,20 @@ public class MyTextEditor extends JFrame implements ActionListener, KeyListener
     if(event.getSource() == newfile)
       newFile();
   
-    if(event.getSource() == open)
-      open();
+    if(event.getSource() == open) {
+    	JFileChooser fileBrowser = new JFileChooser();
+
+    	//valami változós dolog amit nem értek de asszem emiatt jelenik meg
+    	//áááh értem 
+    	//visszatérőérték
+    	//és ez megmondja milyen értékei vannak
+    	//mint pl approve button
+    	int returnValue = fileBrowser.showOpenDialog(this);
+
+    	if(returnValue == JFileChooser.APPROVE_OPTION)
+       		currentFile = fileBrowser.getSelectedFile();
+      	open();
+    }
   
     if(event.getSource() == save)
       save();
@@ -192,21 +237,62 @@ public class MyTextEditor extends JFrame implements ActionListener, KeyListener
     if(event.getSource() == displayLineNumbersBox)
     	displayLineNumbers();
 
+    if(event.getSource() == autoIndent)
+    	isAutoIndentOn = autoIndent.getState();
+
     if(event.getSource() == options)
     	new Options(textArea).setVisible(true);
   } //actionPerformed
 
   //keyPressed
   public void keyPressed(KeyEvent e) {
-  	displayLineNumbers();
+  	if(!getTitle().contains("*"))
+  		hasChangeInTextSinceLastSave = true;
   } // keyPressed
   public void keyReleased(KeyEvent e) {
-  	displayLineNumbers();
+  	//displayLineNumbers();
   } // keyReleased
   public void keyTyped(KeyEvent e){
+  	if(e.getKeyChar() == '\n') {
+  		autoIndent();
+  	}
+  	if(newText != null) {
+  		oldText = newText;
+  	} else
+  		hasChangeInTextSinceLastSave = false;
+  	newText = textArea.getText().split("\n");
   	displayLineNumbers();
+  	setChangeInText();
   } // keyTyped
 
+  //the function that does the has text changed
+  public void setChangeInText() {
+  	if( hasChangeInTextSinceLastSave && !oldText.equals(newText)) {
+  		setTitle(getTitle()+"*");
+  		hasChangeInTextSinceLastSave = false;
+  	} //if
+  } //setChangeInText
+
+  //the function that does the auto indent
+  public void autoIndent() {
+  	if(isAutoIndentOn) {
+  		//string that will hold the last line
+  		String prevLastLine;
+
+  		//if it is the first line we write oldText is null so we use newText
+  		if(oldText == null)
+  			prevLastLine = newText[newText.length-1];
+  		else
+  			prevLastLine = oldText[oldText.length-1];
+  		int whitespaces = 0;
+  		for(int index = 0; index < prevLastLine.length(); index++) {
+  			char c = prevLastLine.charAt(index);
+  			if(Character.isWhitespace(c))
+  				whitespaces++;
+  		}
+  		textArea.append(prevLastLine);
+  	} //if
+  } // autoIndent
     
   //the function that starts a new file
   public void newFile()
@@ -233,7 +319,8 @@ public class MyTextEditor extends JFrame implements ActionListener, KeyListener
        
       } //catch
     } //else
-
+    hasChangeInTextSinceLastSave = false;
+    setTitle("AWESOME text editor - "+currentFile.getName());
   } //save
   
   //the function that does save as
@@ -257,25 +344,14 @@ public class MyTextEditor extends JFrame implements ActionListener, KeyListener
       
       } //catch
     } //if
+    hasChangeInTextSinceLastSave = false;
   } //saveas
   
+  //this method opens the curently selected file
   public void open()
   {
     //deleting the things already in the textarea
     textArea.setText("");
-
-    JFileChooser fileBrowser = new JFileChooser();
-
-    //valami változós dolog amit nem értek de asszem emiatt jelenik meg
-    //áááh értem 
-    //visszatérőérték
-    //és ez megmondja milyen értékei vannak
-    //mint pl approve button
-    int returnValue = fileBrowser.showOpenDialog(this);
-
-    if(returnValue == JFileChooser.APPROVE_OPTION)
-    {
-       currentFile = fileBrowser.getSelectedFile();
 
       //reading the file
       try
@@ -301,12 +377,12 @@ public class MyTextEditor extends JFrame implements ActionListener, KeyListener
         reader.close();
         
         setTitle("AWESOME text editor - "+currentFile.getName());
+        hasChangeInTextSinceLastSave = false;
       } //try
       catch(Exception e)
       {
         
       } //catch
-    } //if
     
   } //open
 
@@ -319,13 +395,16 @@ public class MyTextEditor extends JFrame implements ActionListener, KeyListener
 
   		//add numbers to the text area
   		if(textArea.getLineCount() < 100)
-    		for(int lineNumber = 1 ; lineNumber <= textArea.getLineCount(); lineNumber++)
+    		for(int lineNumber = 1 ; lineNumber <= textArea.getLineCount(); 
+    															lineNumber++)
     			lineNumbers.append(String.format("%3d %n",lineNumber));
     	else if (textArea.getLineCount() < 1000)
-    		for(int lineNumber = 1 ; lineNumber <= textArea.getLineCount(); lineNumber++)
+    		for(int lineNumber = 1 ; lineNumber <= textArea.getLineCount(); 
+    															lineNumber++)
     			lineNumbers.append(String.format("%4d %n",lineNumber));
     	else
-    		for(int lineNumber = 1 ; lineNumber <= textArea.getLineCount(); lineNumber++)
+    		for(int lineNumber = 1 ; lineNumber <= textArea.getLineCount(); 
+    															lineNumber++)
     			lineNumbers.append(String.format("%5d %n",lineNumber));
 	}
 	else {
@@ -342,6 +421,13 @@ public class MyTextEditor extends JFrame implements ActionListener, KeyListener
   
   public static void main(String[] args)
   {
-      new MyTextEditor().setVisible(true);
+      MyTextEditor textEditor = new MyTextEditor();
+      textEditor.setVisible(true);
+      if(args.length > 0)
+      	for(int index = 0; index < args.length; index++)
+      	{
+      		currentFile = new File(args[index]);
+      		textEditor.open();
+      	}
   } //main
 } //MyTextEditor
