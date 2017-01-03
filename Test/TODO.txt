@@ -1,0 +1,15 @@
+- Add tabs for textareas
+    ¤JTabbedPane
+    ¤every scrollpane is added to that as an object
+    ¤every object has a public file to have search 
+    ¤public textareas
+
+-move everything to options
+-add mnemonics (such save CTRL - S)
+-color picker in options
+-change java logo to your own
+-line numbers a bit darker background
+-save settings
+-change menubar and titlebar color
+-add some cool fonts
+-fix combobox
