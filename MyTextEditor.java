@@ -51,8 +51,7 @@ public class MyTextEditor extends JFrame implements ActionListener, KeyListener
 
   //variables about the text
   private boolean hasChangeInTextSinceLastSave;
-  private String[] oldText;
-  private String[] newText;
+  
 
   //just a jmenubar
   private JMenuBar menuBar;
@@ -254,72 +253,6 @@ public class MyTextEditor extends JFrame implements ActionListener, KeyListener
     if(event.getSource() == options)
     	new Options(textArea).setVisible(true);
   } //actionPerformed
-
-  //keyPressed
-  public void keyPressed(KeyEvent e) {
-  	if(!getTitle().contains("*"))
-  		hasChangeInTextSinceLastSave = true;
-  } // keyPressed
-  public void keyReleased(KeyEvent e) {
-  	if(newText != null) {
-      oldText = newText;
-    } else
-      hasChangeInTextSinceLastSave = false;
-    newText = textArea.getText().split("\\n", -1);
-    setChangeInText();
-  } // keyReleased
-  public void keyTyped(KeyEvent e){
-  	if(e.getKeyChar() == '\n') {
-  		autoIndent();
-  	}
-  	displayLineNumbers();
-  } // keyTyped
-
-  //the function that does the has text changed
-  public void setChangeInText() {
-  	if( hasChangeInTextSinceLastSave && !oldText.equals(newText)) {
-  		setTitle(getTitle()+"*");
-  		hasChangeInTextSinceLastSave = false;
-  	} //if
-  } //setChangeInText
-
-  //the function that does the auto indent
-  public void autoIndent() {
-  	if(isAutoIndentOn) {
-        int lineNum = 0;
-        try {
-            //we calculate where the caret is
-            //by calculating the offset of the caret and then calculating which line is that
-            lineNum = textArea.getLineOfOffset(textArea.getCaretPosition());
-        }
-        catch (Exception e) {
-            e.printStackTrace();
-        }  
-  	    //string that holds the previous line
-  	    String prevLastLine = newText[lineNum-1];
-
-        //boolean because we only get characters from the beginning of the line
-        boolean isGettingWhiteSpaces = true;
-
-        //this array list will hold the whitespace characters
-  		ArrayList<Character> whitespaces = new ArrayList<Character>();
-
-        //iterating through last line to and collecting whitespaces until something else is found
-  		for(int index = 0; index < prevLastLine.length(); index++) {
-  			char c = prevLastLine.charAt(index);
-  			if(Character.isWhitespace(c) && isGettingWhiteSpaces)
-  				whitespaces.add(c);
-        else
-          isGettingWhiteSpaces = false;
-  		}
-        //we build the string representation of the whitespace
-        String whitespacesToInsert = "";
-  		for(char whitespace : whitespaces)
-            whitespacesToInsert += whitespace;
-        textArea.insert(whitespacesToInsert, textArea.getCaretPosition());
-
-  	} //if
-  } // autoIndent
     
   //the function that starts a new file
   public void newFile()
@@ -413,38 +346,7 @@ public class MyTextEditor extends JFrame implements ActionListener, KeyListener
     
   } //open
 
-  public void displayLineNumbers() {
-  	if(displayLineNumbersBox.getState()) {
-  		//set the textarea 
-  		lineNumbers.setColumns(3);
-  		lineNumbers.setFont(textArea.getFont());
-  		lineNumbers.setText("");
-
-  		//add numbers to the text area
-  		if(textArea.getLineCount() < 100)
-    		for(int lineNumber = 1 ; lineNumber <= textArea.getLineCount(); 
-    															lineNumber++)
-    			lineNumbers.append(String.format("%3d %n",lineNumber));
-    	else if (textArea.getLineCount() < 1000)
-    		for(int lineNumber = 1 ; lineNumber <= textArea.getLineCount(); 
-    															lineNumber++)
-    			lineNumbers.append(String.format("%4d %n",lineNumber));
-    	else
-    		for(int lineNumber = 1 ; lineNumber <= textArea.getLineCount(); 
-    															lineNumber++)
-    			lineNumbers.append(String.format("%5d %n",lineNumber));
-	}
-	else {
-		//set text to nothing and shrink it down to zero
-		lineNumbers.setText("");
-		lineNumbers.setColumns(0);
-	}
-	
-	Rectangle r = this.getBounds();
-	this.setPreferredSize(new Dimension(r.width,r.height));
-	pack();
-
-  } // displayLineNumbers
+  
   
   public static void main(String[] args)
   {
