@@ -19,6 +19,7 @@ import java.io.File;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.FileWriter;
+import javax.swing.ImageIcon;
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JFileChooser;
@@ -45,6 +46,9 @@ public class MyTextEditor extends JFrame implements ActionListener, KeyListener
   //This is the current file the user is working on
   private static File currentFile;
 
+  //This will hold the icon set to this JFrame
+  ImageIcon programIcon;
+
   //variables about the text
   private boolean hasChangeInTextSinceLastSave;
   private String[] oldText;
@@ -54,7 +58,7 @@ public class MyTextEditor extends JFrame implements ActionListener, KeyListener
   private JMenuBar menuBar;
 
   //jmenus user can choose
-  //TODO options help credits
+  //TODO edit help credits
   private JMenu file, edit, help, credits;
 
   //jmenuitems in file
@@ -100,12 +104,17 @@ public class MyTextEditor extends JFrame implements ActionListener, KeyListener
     //Need a menubar
     menuBar = new JMenuBar();
 
+    //UI settings go here
     //tweak UIManager settings
     UIManager.put("Menu.font",menuBar.getFont().deriveFont(fontSizes));
     UIManager.put("TextArea.background",initBackgroundColor);
     UIManager.put("TextArea.disabledBackground", Color.GRAY);
     UIManager.put("TextArea.foreground",initForeGroundColor);
     UIManager.put("TextArea.caretForeground",initForeGroundColor);
+
+    //create icon and set it
+    programIcon = new ImageIcon("Data/Icon.gif");
+    setIconImage(programIcon.getImage());
 
                      /***********************
                         Menus on the bar
