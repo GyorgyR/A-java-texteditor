@@ -14,8 +14,8 @@ This is a class that contains everything in a text tab
 public class TextTab extends JPanel implements KeyListener{
 
 	//settings variables
-	private boolean isNumberingLines;
-	private boolean isAutoIndenting;
+	private boolean isNumberingLines = true;
+	private boolean isAutoIndenting = true;
 
 	//the texts in variables
 	private String[] oldText;
@@ -36,40 +36,49 @@ public class TextTab extends JPanel implements KeyListener{
 
 
 	//contructor
-	public TextTab() {
+	public TextTab(JFrame frame) {
+		setLayout(new BorderLayout());
 
 		//initializing JTextArea holding lineNumbers and adding to this JPanel
 		lineNumbers = new JTextArea();
-		this.add(lineNumbers);
+		this.add(lineNumbers, BorderLayout.WEST);
 
 		//init editorArea and add to this JPanel
 		editorArea = new JTextPane();
 		currentDocument = editorArea.getStyledDocument();
-		this.add(editorArea);
+		editorArea.addKeyListener(this);
+		this.add(editorArea, BorderLayout.CENTER);
 
 		//getting the JFrame of the parent
-		topFrame = (JFrame) SwingUtilities.getWindowAncestor(this);
+		topFrame = frame;
+		
 	} //TextTab constructor
 
 	//keyPressed
 	public void keyPressed(KeyEvent e) {
 		if(!topFrame.getTitle().contains("*"))
-        hasChangeInTextSinceLastSave = true;
+        	hasChangeInTextSinceLastSave = true;
     } // keyPressed
 
 	public void keyReleased(KeyEvent e) {
-		if(newText != null) {
-			oldText = newText;
-		} else
-			hasChangeInTextSinceLastSave = false;
-		newText = editorArea.getText().split("\\n", -1);
 		setChangeInText();
 	} // keyReleased
 
 	public void keyTyped(KeyEvent e){
-		if(e.getKeyChar() == '\n') {
-			autoIndent();
+
+		if(newText != null) {
+			oldText = newText;
+		} else
+			hasChangeInTextSinceLastSave = false;
+		try{
+			newText = currentDocument.getText(0,currentDocument.getLength()).split("\\n", -1);
+		} catch (BadLocationException exception) {
+			exception.printStackTrace();
 		}
+
+		//if enter has been pressed indent
+		if(e.getKeyChar() == '\n')
+			autoIndent();
 
 		displayLineNumbers();
 	} // keyTyped
@@ -97,7 +106,7 @@ public class TextTab extends JPanel implements KeyListener{
     			e.printStackTrace();
 			} //catch
   	    //string that holds the previous line
-  	    String prevLastLine = newText[lineNum-1];
+  	    String prevLastLine = newText[lineNum-2];
 
         //boolean because we only get characters from the beginning of the line
         boolean isGettingWhiteSpaces = true;
@@ -134,7 +143,7 @@ public class TextTab extends JPanel implements KeyListener{
   		lineNumbers.setText("");
 
   		//variable that holds the number of lines
-  		int noOfLines = newText.length;
+  		int noOfLines = newText.length ;
 
   		//add numbers to the text area
   		if(noOfLines < 100)
@@ -156,8 +165,8 @@ public class TextTab extends JPanel implements KeyListener{
 		lineNumbers.setColumns(0);
 	}
 	
-	Rectangle r = this.getBounds();
-	this.setPreferredSize(new Dimension(r.width,r.height));
+	Rectangle r = topFrame.getBounds();
+	topFrame.setPreferredSize(new Dimension(r.width,r.height));
 	topFrame.pack();
 
   } // displayLineNumbers
