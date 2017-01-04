@@ -28,8 +28,6 @@ public class MyTextEditor extends JFrame implements ActionListener
 
   //jmenuitems in edit
   private JMenuItem options;
-  private JCheckBoxMenuItem displayLineNumbersBox;
-  private JCheckBoxMenuItem autoIndent;
 
   //options variables
   public boolean isAutoIndentOn;
@@ -73,6 +71,9 @@ public class MyTextEditor extends JFrame implements ActionListener
     UIManager.put("TextArea.disabledBackground", Color.GRAY);
     UIManager.put("TextArea.foreground",initForeGroundColor);
     UIManager.put("TextArea.caretForeground",initForeGroundColor);
+    UIManager.put("TextPane.background",initBackgroundColor);
+    UIManager.put("TextPane.foreground",initForeGroundColor);
+    UIManager.put("TextPane.caretForeground",initForeGroundColor);
 
     //create icon and set it
     programIcon = new ImageIcon("Data/Icon.gif");
@@ -120,16 +121,6 @@ public class MyTextEditor extends JFrame implements ActionListener
                     /**************************
                        Menu items in edit
                     ***************************/
-    //line numbering
-    // a JPanel for linenumber labels
-    displayLineNumbersBox = new JCheckBoxMenuItem("Display Line Numbers");
-    displayLineNumbersBox.addActionListener(this);
-    edit.add(displayLineNumbersBox);
-
-    //auto indentation
-    autoIndent = new JCheckBoxMenuItem("Auto Indent");
-    autoIndent.addActionListener(this);
-    edit.add(autoIndent);
 
     //options
     options = new JMenuItem("Options");
@@ -150,11 +141,6 @@ public class MyTextEditor extends JFrame implements ActionListener
     myContainer.setPreferredSize(new Dimension(600,800));
     setDefaultCloseOperation(DISPOSE_ON_CLOSE);
     pack();
-
-    //this is where I will load in the settings
-    //now I just initialize variables
-    isAutoIndentOn = false;
-    autoIndent.setState(isAutoIndentOn);
   } //MyTextEditor constructor
   
   public void actionPerformed(ActionEvent event)
@@ -192,26 +178,58 @@ public class MyTextEditor extends JFrame implements ActionListener
                           EDIT
             *************************************/
 
-    if(event.getSource() == displayLineNumbersBox)
-
-
-    if(event.getSource() == autoIndent)
-    	isAutoIndentOn = autoIndent.getState();
-
-    if(event.getSource() == options);
-    	//new Options(textArea).setVisible(true);
+    if(event.getSource() == options)
+    	new Options(this).setVisible(true);
   } //actionPerformed
 
   public TextTab getSelectedTab() {
     return (TextTab)tabs.getSelectedComponent();
 
   } //getSelectedTab
+
+  //function to set the line numbering for all tabs
+  public void setLineNumbering(boolean isOn) {
+    for(int index = 0; index < tabs.getTabCount(); index++) {
+        TextTab tab = (TextTab) tabs.getComponentAt(index);
+        tab.setLineNumbering(isOn);
+    }
+  } //setLineNumbering
+
+  public void setAutoIndenting(boolean isOn) {
+    for(int index = 0; index < tabs.getTabCount(); index++) {
+        TextTab tab = (TextTab) tabs.getComponentAt(index);
+        tab.setAutoIndent(isOn);
+    }
+  } //setAutoIndenting
+
+  public void setTabSize(int size) {
+    for(int index = 0; index < tabs.getTabCount(); index++) {
+        TextTab tab = (TextTab) tabs.getComponentAt(index);
+        tab.setTabSize(size);
+    }
+  } //setTabSize
+
+  public int getTabSize() {
+    return getSelectedTab().getTabSize();
+  } //getTabSize
+
+  public void setFontOfArea(Font font) {
+    if(getSelectedTab() != null)
+        getSelectedTab().setFontOfArea(font);
+  } //setFont
+
+  public Font getFontOfArea() {
+    return getSelectedTab().getFontOfArea();
+  } //getFont
     
   //the function that starts a new file
   public void newFile()
   {
     tabs.add(new TextTab(this,null,tabs));
     tabs.setTabComponentAt(tabs.getTabCount()-1, new ButtonTabComponent(tabs));
+
+    //set the active tab to the new one
+    tabs.setSelectedIndex(tabs.getTabCount()-1);
   } //newFile
     
   //the function that does save

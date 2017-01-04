@@ -9,6 +9,8 @@ import java.awt.event.*;
  * Contains a JLabel to show the text and 
  * a JButton to close the tab it belongs to 
  */
+//This class is completely stolen from the java tutorial webpage
+//HAS TO BE REWRITTEN
 public class ButtonTabComponent extends JPanel {
     private final JTabbedPane pane;
  

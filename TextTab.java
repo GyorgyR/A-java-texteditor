@@ -43,6 +43,9 @@ public class TextTab extends JPanel implements KeyListener{
 	//reference to the tabbep pane this is in
 	private JTabbedPane tabbedPane;
 
+	//the initial tab size
+	private int initTabSize = 8;
+
 	//contructor
 	public TextTab(JFrame frame, File file, JTabbedPane tabs) {
 		setLayout(new BorderLayout());
@@ -100,6 +103,10 @@ public class TextTab extends JPanel implements KeyListener{
 		displayLineNumbers();
 	} // keyTyped
 
+	public JTextPane getTextPane() {
+		return editorArea;
+	} // getTextPane
+
 	//the function that does the has text changed
 	public void setChangeInText() {
 		if( hasChangeInTextSinceLastSave && !oldText.equals(newText)) {
@@ -152,6 +159,10 @@ public class TextTab extends JPanel implements KeyListener{
   	} //if
   } // autoIndent
 
+  public void setAutoIndent(boolean isOn) {
+  	isAutoIndenting = isOn;
+  } //setAutoIndent
+
   public void displayLineNumbers() {
   	if(isNumberingLines) {
   		//set the textarea 
@@ -188,9 +199,44 @@ public class TextTab extends JPanel implements KeyListener{
 
   } // displayLineNumbers
 
+  public void setLineNumbering(boolean isOn) {
+  	isNumberingLines = isOn;
+  	try{
+		newText = currentDocument.getText(0,currentDocument.getLength()).split("\\n", -1);
+	} 
+	catch (BadLocationException exception) {
+		exception.printStackTrace();
+	}
+  	displayLineNumbers();
+  } //setLineNumbering
+
   public String getName() {
   	return tabTitle;
   } //getName
+
+  public void setFontOfArea(Font font) {
+  	editorArea.setFont(font);
+  } //setFont
+
+  public Font getFontOfArea() {
+  	return editorArea.getFont();
+  } //getFont
+
+  public void setTabSize(int size) {
+  	//setting the teab size to the new value
+  	initTabSize = size;
+  	//getting how wide a space is in pixels
+  	int spaceSize = editorArea.getFontMetrics(editorArea.getFont()).stringWidth(" ");
+
+  	StyleContext sc = StyleContext.getDefaultStyleContext();
+	TabSet tabs = new TabSet(new TabStop[] { new TabStop(spaceSize * size * 2) });
+	AttributeSet paraSet = sc.addAttribute(SimpleAttributeSet.EMPTY, StyleConstants.TabSet, tabs);
+	editorArea.setParagraphAttributes(paraSet, false);
+  } //setTabSize
+
+  public int getTabSize() {
+  	return initTabSize;
+  } //getTabSize
 
   //the function that does save
   public void save()
