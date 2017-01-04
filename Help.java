@@ -1,5 +1,6 @@
 import java.awt.*;
 import javax.swing.*;
+import java.io.*;
 
 public class Help extends JFrame{
 
@@ -8,9 +9,12 @@ public class Help extends JFrame{
 		Container myCont = getContentPane();
 
 		JTabbedPane tabs = new JTabbedPane();
-		tabs.add(new TextTab(this));
+		tabs.add(new TextTab(this,null,tabs));
+		tabs.add(new TextTab(this,new File("Test/test.txt"),tabs));
 
-		myCont.add(tabs);
+		JScrollPane scrollPane = new JScrollPane(tabs);
+
+		myCont.add(scrollPane);
 
 		myCont.setPreferredSize(new Dimension(600,800));
     	setDefaultCloseOperation(DISPOSE_ON_CLOSE);

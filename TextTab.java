@@ -14,10 +14,16 @@ This is a class that contains everything in a text tab
 public class TextTab extends JPanel implements KeyListener{
 
 	//settings variables
-	private boolean isNumberingLines = true;
-	private boolean isAutoIndenting = true;
+	private boolean isNumberingLines;
+	private boolean isAutoIndenting;
 
-	//the texts in variables
+	//the File that is currently loaded to this tab
+	private File currentFile;
+
+	//the title of this bar
+	public String tabTitle;
+
+	//the text in variables
 	private String[] oldText;
 	private String[] newText;
 	private StyledDocument currentDocument;
@@ -29,15 +35,18 @@ public class TextTab extends JPanel implements KeyListener{
 	private JTextArea lineNumbers;
 
 	//the parent JFrame
-	JFrame topFrame;
+	private JFrame topFrame;
 
 	//boolean to know if text has changed
 	private boolean hasChangeInTextSinceLastSave;
 
+	//reference to the tabbep pane this is in
+	private JTabbedPane tabbedPane;
 
 	//contructor
-	public TextTab(JFrame frame) {
+	public TextTab(JFrame frame, File file, JTabbedPane tabs) {
 		setLayout(new BorderLayout());
+		tabbedPane = tabs;
 
 		//initializing JTextArea holding lineNumbers and adding to this JPanel
 		lineNumbers = new JTextArea();
@@ -51,6 +60,14 @@ public class TextTab extends JPanel implements KeyListener{
 
 		//getting the JFrame of the parent
 		topFrame = frame;
+
+		//opening if file has been given 
+		currentFile = file;
+
+		if(currentFile != null)
+			open();
+		else
+			tabTitle = "untitled";
 		
 	} //TextTab constructor
 
@@ -86,10 +103,10 @@ public class TextTab extends JPanel implements KeyListener{
 	//the function that does the has text changed
 	public void setChangeInText() {
 		if( hasChangeInTextSinceLastSave && !oldText.equals(newText)) {
-			topFrame.setTitle(topFrame.getTitle()+"*");
+			tabbedPane.setTitleAt(tabbedPane.getSelectedIndex(), "*"+tabTitle);
 			hasChangeInTextSinceLastSave = false;
-  	} //if
-  } //setChangeInText
+  		} //if
+  	} //setChangeInText
 
     //the function that does the auto indent
   public void autoIndent() {
@@ -170,5 +187,102 @@ public class TextTab extends JPanel implements KeyListener{
 	topFrame.pack();
 
   } // displayLineNumbers
+
+  public String getName() {
+  	return tabTitle;
+  } //getName
+
+  //the function that does save
+  public void save()
+  {
+    //if this is the first save need to know where to save
+    if (currentFile == null)
+      saveas();
+    else
+    {
+      try(FileWriter writer = new FileWriter(currentFile))
+      {
+        editorArea.write(writer);
+        hasChangeInTextSinceLastSave = false;
+      } //try
+      catch (Exception e)
+      {
+      	e.printStackTrace();
+      } //catch
+    } //else
+    tabbedPane.setTitleAt(tabbedPane.getSelectedIndex(),tabTitle);
+  } //save
+
+  //the function that does save as
+  public void saveas()
+  {
+    JFileChooser fileBrowser = new JFileChooser();
+
+    //the return value of the jfilechooser
+    int returnValue = fileBrowser.showSaveDialog(this);
+
+    if(returnValue == JFileChooser.APPROVE_OPTION)
+    {
+      try(FileWriter writer = new FileWriter(fileBrowser.getSelectedFile()))
+      { 
+        editorArea.write(writer);
+        currentFile = fileBrowser.getSelectedFile();
+        hasChangeInTextSinceLastSave = false;
+
+      } //try
+      catch (Exception e)
+      {
+      
+      } //catch
+    } //if
+    tabTitle = fileBrowser.getSelectedFile().getName();
+    tabbedPane.setTitleAt(tabbedPane.getSelectedIndex(),tabTitle);
+  } //saveas
+
+  //this method opens the curently selected file
+  public void open()
+  {
+    //reading the file
+    try
+    {
+    	BufferedReader reader = new BufferedReader(new FileReader(currentFile));
+    	//reading a string then appending it to t5he text area
+    	String line = reader.readLine();
+    	boolean isFirstLine = true;
+
+    	//while there is a next line append it to the textarea
+    	//with a lineseparator
+    	while(line != null)
+    	{
+    		if(isFirstLine) {
+    			//append the line 
+    			currentDocument.insertString(currentDocument.getLength(),line,null);
+    			//read next line
+    			line = reader.readLine();
+
+    			//now the next line won't be the first line 
+    			isFirstLine = false;
+    		}
+    		else {
+        		//add lineseparator
+        		currentDocument.insertString(currentDocument.getLength(),System.lineSeparator(),null);
+        		//append the line
+        		currentDocument.insertString(currentDocument.getLength(),line,null);
+        		//read the next line
+        		line = reader.readLine();
+        	}
+    	} //while
+        
+        reader.close();
+        
+        tabTitle = currentFile.getName();
+        hasChangeInTextSinceLastSave = false;
+    } //try
+    catch(Exception e)
+    {
+    	e.printStackTrace();
+    } //catch
+    
+  } //open
 
 } //TextTab

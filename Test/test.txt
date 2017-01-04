@@ -1,6 +1,5 @@
-sorok
-sorok
-sorok
-sorokkka
-dolgok
-tudok bele irnii dolgokat
+első sor
+második sor
+harmadik sor
+negyedik sor
+ötödik sor
