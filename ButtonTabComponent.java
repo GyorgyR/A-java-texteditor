@@ -22,6 +22,9 @@ public class ButtonTabComponent extends JPanel {
         }
         this.pane = pane;
         setOpaque(false);
+
+        //tab button
+        JButton button = new TabButton();
          
         //make JLabel read titles from JTabbedPane
         JLabel label = new JLabel() {
@@ -36,12 +39,10 @@ public class ButtonTabComponent extends JPanel {
          
         add(label);
         //add more space between the label and the button
-        label.setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 5));
-        //tab button
-        JButton button = new TabButton();
+        label.setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 10));
         add(button);
         //add more space to the top of the component
-        setBorder(BorderFactory.createEmptyBorder(2, 0, 0, 0));
+        setBorder(BorderFactory.createEmptyBorder(4, 0, 0, 0));
     }
  
     private class TabButton extends JButton implements ActionListener {
