@@ -111,6 +111,8 @@ public class TextTab extends JPanel implements KeyListener{
 	public void setChangeInText() {
 		if( hasChangeInTextSinceLastSave && !oldText.equals(newText)) {
 			tabbedPane.setTitleAt(tabbedPane.getSelectedIndex(), "*"+tabTitle);
+      ButtonTabComponent btc = (ButtonTabComponent) tabbedPane.getTabComponentAt(tabbedPane.getSelectedIndex());
+      btc.updateThisThing();
 			hasChangeInTextSinceLastSave = false;
   		} //if
   	} //setChangeInText
