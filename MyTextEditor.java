@@ -163,6 +163,7 @@ public class MyTextEditor extends JFrame implements ActionListener
 
     	if(returnValue == JFileChooser.APPROVE_OPTION)
        		open(fileBrowser.getSelectedFile());
+       	else {}
     }
   
     if(event.getSource() == save)
