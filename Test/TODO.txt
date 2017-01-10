@@ -1,6 +1,12 @@
+-fiw windows fontsize
+-options other tab
+-bracket completion
+-insert spaces instead of tabulators
+-undo and redo
+-copy, cut, paste
 -add mnemonics (such save CTRL - S)
--color picker in options
 -themes(colour)
+-color picker in options
 -save settings
 -change menubar and titlebar color
 -add some cool fonts
