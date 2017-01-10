@@ -29,10 +29,13 @@ public class MyTextEditor extends JFrame implements ActionListener
   //jmenuitems in edit
   private JMenuItem options;
 
-  //options variables
-  public boolean isAutoIndentOn;
+  //options variables and default settings
+  File settings = new File("Data/Settings");
+  private boolean isAutoIndentOn, isNumberingLinesOn, isHighDPIOn = false;
   private float fontSizes = 16.0f;
-
+  private float tabFontSize = 16.0f;
+  private int tabSize = 8;
+  private Font fontUsed = new Font("Tahoma", Font.PLAIN, 16);
 
   //the JScrollPane holding the JTabbedPane
   JScrollPane scrollPane;
@@ -47,27 +50,36 @@ public class MyTextEditor extends JFrame implements ActionListener
   //constructor
   public MyTextEditor()
   {
-  	try
-  	{
-  		UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
-  		System.out.println(UIManager.getSystemLookAndFeelClassName());
-  	}
-  	catch(Exception e)
-  	{
-  		e.printStackTrace();
-  	}
-
-    setTitle("AWESOME text editor");
-
+  	//the container used in this JFrame
     Container myContainer = getContentPane();
     myContainer.setLayout(new BorderLayout());
 
     //Need a menubar
     menuBar = new JMenuBar();
 
+  	//set the look and feel
+  	try
+  	{
+  		UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+  		//System.out.println(UIManager.getSystemLookAndFeelClassName());
+  	}
+  	catch(Exception e)
+  	{
+  		e.printStackTrace();
+  	}
+
+  	//loading the high dpi setings
+  	loadSettingsForEditor();
+
+  	//calculating the fonts for high dpi
+  	if(isHighDPIOn) {
+  		fontSizes = 24.0f;
+  		tabFontSize = 20.0f;
+  	} //if
+
     //UI settings go here
     //tweak UIManager settings
-    UIManager.put("Menu.font",menuBar.getFont().deriveFont(fontSizes));
+    UIManager.put("Menu.font",menuBar.getFont().deriveFont(Font.PLAIN,fontSizes));
     UIManager.put("TextArea.background",initBackgroundColor);
     UIManager.put("TextArea.disabledBackground", Color.GRAY);
     UIManager.put("TextArea.foreground",initForeGroundColor);
@@ -75,6 +87,8 @@ public class MyTextEditor extends JFrame implements ActionListener
     UIManager.put("TextPane.background",initBackgroundColor);
     UIManager.put("TextPane.foreground",initForeGroundColor);
     UIManager.put("TextPane.caretForeground",initForeGroundColor);
+
+    setTitle("AWESOME text editor");
 
     //create icon and set it
     programIcon = new ImageIcon("Data/Icon.gif");
@@ -184,6 +198,125 @@ public class MyTextEditor extends JFrame implements ActionListener
     	new Options(this).setVisible(true);
   } //actionPerformed
 
+  public void saveSettings() {
+  	//try catch block for the fileWriter
+  	try {
+  		FileWriter fileWriter = new FileWriter(settings);
+
+  		//font
+  		fileWriter.write("Font: ");
+  		fileWriter.write(settingsFontToString(fontUsed));
+  		fileWriter.write(System.lineSeparator());
+
+  		//tab size
+  		fileWriter.write("TabSize: ");
+  		fileWriter.write(""+tabSize);
+  		fileWriter.write(System.lineSeparator());
+
+  		//numbering lines
+  		fileWriter.write("LineNumbering: ");
+  		fileWriter.write(""+isNumberingLinesOn);
+  		fileWriter.write(System.lineSeparator());
+
+  		//auto indent
+  		fileWriter.write("AutoIndent: ");
+  		fileWriter.write(""+isAutoIndentOn);
+  		fileWriter.write(System.lineSeparator());
+
+  		//high dpi
+  		fileWriter.write("HighDPI: ");
+  		fileWriter.write(""+isHighDPIOn);
+  		fileWriter.write(System.lineSeparator());
+
+
+  		fileWriter.close();
+  	} catch(Exception e) {
+  		e.printStackTrace();
+  	}
+
+  } //saveSettings
+
+  public void loadSettingsForTextTab() {
+  	//try catch block for FileReader
+  	try {
+  		BufferedReader reader = new BufferedReader(new FileReader(settings));
+  		String line = reader.readLine();
+
+  		while(line != null) {
+  			String[] settings = line.split(" ");
+
+  			//a big if statement collection
+  			if(settings[0].equals("Font:")) 
+  				setFontOfArea(settingsReadFont(settings[1]));
+
+  			if(settings[0].equals("TabSize:"))
+  				setTabSize(Integer.parseInt(settings[1]));
+
+  			if(settings[0].equals("LineNumbering:"))
+  				setLineNumbering(Boolean.parseBoolean(settings[1]));
+
+  			if(settings[0].equals("AutoIndent:"))
+  				setAutoIndenting(Boolean.parseBoolean(settings[1]));
+
+  			line = reader.readLine();
+  		} //while
+ 
+  	} catch(Exception e) {
+  		e.printStackTrace();
+  	}
+  } //loadSettingsForTextTabs
+
+  public void loadSettingsForEditor() {
+  	//try catch block for reading the settings file
+  	try {
+  		BufferedReader reader = new BufferedReader(new FileReader(settings));
+  		String line = reader.readLine();
+
+  		while(line != null) {
+  			//splitting into setting names and values
+  			String[] settings = line.split(" ");
+
+  			//just a bunch of if statements
+  			if(settings[0].equals("HighDPI:"))
+  				isHighDPIOn = Boolean.parseBoolean(settings[1]);
+  			line = reader.readLine();
+  		} //while
+
+
+
+  	} catch(Exception e) {
+  		e.printStackTrace();
+  	}
+  } //loadSettingsForEditor
+
+  public boolean getLineNumbering() {
+  	return isNumberingLinesOn;
+  } //getLineNumbering
+
+  public boolean getAutoIndent() {
+  	return isAutoIndentOn;
+  } //getAutoIndent
+
+  public boolean getHighDPI() {
+  	return isHighDPIOn;
+  } //getHighDPI
+
+  public Font settingsReadFont(String line) {
+  	String[] font = line.split(",");
+  	int style = Integer.parseInt(font[1]);
+  	int size = Integer.parseInt(font[2]);
+  	return new Font(font[0],style,size);
+  } //settingsReadFont
+
+  public String settingsFontToString(Font f) {
+  	return f.getName()+","+f.getStyle()+","+f.getSize(); 
+  } //settingFontToString
+
+  public void setHighDPI(boolean isOn) {
+  	isHighDPIOn = isOn;
+  	saveSettings();
+  } //setHighDPI
+
   public TextTab getSelectedTab() {
     return (TextTab)tabs.getSelectedComponent();
 
@@ -194,21 +327,30 @@ public class MyTextEditor extends JFrame implements ActionListener
     for(int index = 0; index < tabs.getTabCount(); index++) {
         TextTab tab = (TextTab) tabs.getComponentAt(index);
         tab.setLineNumbering(isOn);
-    }
+    } //for
+
+    //storing for the setting file
+    isNumberingLinesOn = isOn;
   } //setLineNumbering
 
   public void setAutoIndenting(boolean isOn) {
     for(int index = 0; index < tabs.getTabCount(); index++) {
         TextTab tab = (TextTab) tabs.getComponentAt(index);
         tab.setAutoIndent(isOn);
-    }
+    } //for
+
+    //storing for the setting file
+    isAutoIndentOn = isOn;
   } //setAutoIndenting
 
   public void setTabSize(int size) {
     for(int index = 0; index < tabs.getTabCount(); index++) {
         TextTab tab = (TextTab) tabs.getComponentAt(index);
         tab.setTabSize(size);
-    }
+    } //for
+
+    //storing for the setting file
+    tabSize = size;
   } //setTabSize
 
   public int getTabSize() {
@@ -218,6 +360,9 @@ public class MyTextEditor extends JFrame implements ActionListener
   public void setFontOfArea(Font font) {
     if(getSelectedTab() != null)
         getSelectedTab().setFontOfArea(font);
+
+    //storing for the setting file
+    fontUsed = font;
   } //setFont
 
   public Font getFontOfArea() {
@@ -228,7 +373,8 @@ public class MyTextEditor extends JFrame implements ActionListener
   public void newFile()
   {
     tabs.add(new TextTab(this,null,tabs));
-    tabs.setTabComponentAt(tabs.getTabCount()-1, new ButtonTabComponent(tabs));
+    tabs.setTabComponentAt(tabs.getTabCount()-1, 
+    								new ButtonTabComponent(tabs, tabFontSize));
 
     //set the active tab to the new one
     tabs.setSelectedIndex(tabs.getTabCount()-1);
@@ -253,7 +399,8 @@ public class MyTextEditor extends JFrame implements ActionListener
   {
     //add a new tab with the file opened
     tabs.add(new TextTab(this,file,tabs));
-    tabs.setTabComponentAt(tabs.getTabCount()-1, new ButtonTabComponent(tabs));
+    tabs.setTabComponentAt(tabs.getTabCount()-1, 
+    								new ButtonTabComponent(tabs, tabFontSize));
 
     //set the active tab to the new one
     tabs.setSelectedIndex(tabs.getTabCount()-1);
@@ -273,5 +420,8 @@ public class MyTextEditor extends JFrame implements ActionListener
       	}
       if(args.length == 0)
         textEditor.newFile();
+
+    //reading the settings and setting them
+    textEditor.loadSettingsForTextTab();
   } //main
 } //MyTextEditor

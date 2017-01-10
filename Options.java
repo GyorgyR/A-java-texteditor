@@ -10,11 +10,14 @@ This is the Options screen in MyTextEditor
 public class Options extends JFrame implements ActionListener
 {
 	//jmenuitems in options
-  	private JCheckBox wrapLine, wrapStyle, lineNumbering, autoIndenting;
+  	private JCheckBox wrapLine, wrapStyle, lineNumbering, autoIndenting, highdpi;
   	//the current font size
   	private JTextField fontSize, tabSize;
   	//the current font
   	private JComboBox<Font> fontType;
+
+  	//a button to save the settings
+  	private JButton saveSettings;
 
   	//the MyTextEditor class
   	private MyTextEditor mainEditor;
@@ -26,13 +29,30 @@ public class Options extends JFrame implements ActionListener
 	{
 		//set the title
 		setTitle("Options");
+
 		//create icon and set it
     	programIcon = new ImageIcon("Data/Icon.gif");
     	setIconImage(programIcon.getImage());
+
+		//the main class 
 		mainEditor = editor;
 
+		Container cont = getContentPane();
+		cont.setLayout(new BorderLayout());
+
+		//the tabbed pane which holds the tabs for options
 		JTabbedPane tabbedPane = new JTabbedPane();
-		getContentPane().add(tabbedPane);
+		cont.add(tabbedPane, BorderLayout.CENTER);
+
+		//creating the jpanel where the save settings button will be
+		JPanel strip = new JPanel();
+		cont.add(strip, BorderLayout.SOUTH);
+
+		//the saveSettings button
+		saveSettings = new JButton("Save Settings");
+		saveSettings.addActionListener(this);
+		strip.add(saveSettings);
+
 
 		//tab for everything regards fonts
 		JPanel font = new JPanel();
@@ -95,11 +115,19 @@ public class Options extends JFrame implements ActionListener
     	lineNumbering = new JCheckBox("Numbering Lines");
     	other.add(lineNumbering);
     	lineNumbering.addActionListener(this);
+    	lineNumbering.setSelected(mainEditor.getLineNumbering());
 
     	//autoindent
     	autoIndenting = new JCheckBox("Auto Indenting");
     	other.add(autoIndenting);
     	autoIndenting.addActionListener(this);
+    	autoIndenting.setSelected(mainEditor.getAutoIndent());
+
+    	//highdpi
+    	highdpi = new JCheckBox("High-DPI Monitor");
+    	highdpi.addActionListener(this);
+    	highdpi.setSelected(mainEditor.getHighDPI());
+    	other.add(highdpi);
 
 
 		setDefaultCloseOperation(DISPOSE_ON_CLOSE);
@@ -126,6 +154,12 @@ public class Options extends JFrame implements ActionListener
 
     	if(event.getSource() == autoIndenting)
     		mainEditor.setAutoIndenting(autoIndenting.isSelected());
+
+    	if(event.getSource() == highdpi)
+    		mainEditor.setHighDPI(highdpi.isSelected());
+
+    	if(event.getSource() == saveSettings)
+    		mainEditor.saveSettings();
 	} // actionPerformed
 } //Options
 

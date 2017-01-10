@@ -16,7 +16,7 @@ public class ButtonTabComponent extends JPanel {
 
     private JButton button;
  
-    public ButtonTabComponent(final JTabbedPane pane) {
+    public ButtonTabComponent(final JTabbedPane pane, float size) {
         //unset default FlowLayout' gaps
         super(new FlowLayout(FlowLayout.LEFT, 0, 0));
         if (pane == null) {
@@ -39,6 +39,7 @@ public class ButtonTabComponent extends JPanel {
             }
         };
          
+        label.setFont(label.getFont().deriveFont(size));
         add(label);
         //add more space between the label and the button
         label.setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 10));
