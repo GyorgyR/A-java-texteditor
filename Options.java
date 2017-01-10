@@ -44,7 +44,7 @@ public class Options extends JFrame implements ActionListener
 
 		//tab for other options
 		JPanel other = new JPanel();
-		other.setLayout(new GridLayout(3,2));
+		other.setLayout(new GridLayout(0,1));
 
 		//adding JPanels to the tabbedpane as tabs
 		tabbedPane.addTab("Font",font);
@@ -81,11 +81,15 @@ public class Options extends JFrame implements ActionListener
     	wrapStyle.setEnabled(false);
 
     	//tab size
-    	other.add(new JLabel("Tab Size: "));
+    	//a jpanel holds the label and the textfield
+    	JPanel tabPanel = new JPanel();
+    	tabPanel.setLayout(new GridLayout(0,2));
+    	tabPanel.add(new JLabel("Tab Size: "));
     	tabSize = new JTextField(""+mainEditor.getTabSize());
     	tabSize.setSize(new Dimension(1,1));
-    	other.add(tabSize);
+    	tabPanel.add(tabSize);
     	tabSize.addActionListener(this);
+    	other.add(tabPanel);
 
     	//lineNumbering
     	lineNumbering = new JCheckBox("Numbering Lines");
@@ -105,22 +109,6 @@ public class Options extends JFrame implements ActionListener
 	//actionPerformed
 	public void actionPerformed(ActionEvent event)
 	{
-		//TODO
-		/*
-		if(event.getSource() == wrapLine)
-    	{
-    		textArea.setLineWrap(wrapLine.isSelected());
-    		if(textArea.getLineWrap())
-    			wrapStyle.setEnabled(true);
-    		else
-        		wrapStyle.setEnabled(false);
-    	}
-
-
-    	if(event.getSource() == wrapStyle)
-    		textArea.setWrapStyleWord(wrapStyle.isSelected());
-    	*/
-
     	if(event.getSource() == fontType)
     	{
     		Font f = (Font) fontType.getSelectedItem();

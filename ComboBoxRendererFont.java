@@ -23,11 +23,11 @@ public class ComboBoxRendererFont extends JLabel implements ListCellRenderer
 
     	//the selected items index is -1
     	if (index == -1)
-    		setFont(fonts.deriveFont(14.0f));
+    		setFont(fonts.deriveFont(16.0f));
         
         String textOnLabel = fonts.getFontName();
         setText(textOnLabel);
-        setFont(fonts.deriveFont(14.0f));
+        setFont(fonts.deriveFont(16.0f));
         return this;
     }
 		

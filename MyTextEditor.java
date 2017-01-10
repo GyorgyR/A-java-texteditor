@@ -31,7 +31,7 @@ public class MyTextEditor extends JFrame implements ActionListener
 
   //options variables
   public boolean isAutoIndentOn;
-  private float fontSizes = 14.0f;
+  private float fontSizes = 16.0f;
 
 
   //the JScrollPane holding the JTabbedPane
@@ -50,6 +50,7 @@ public class MyTextEditor extends JFrame implements ActionListener
   	try
   	{
   		UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+  		System.out.println(UIManager.getSystemLookAndFeelClassName());
   	}
   	catch(Exception e)
   	{
