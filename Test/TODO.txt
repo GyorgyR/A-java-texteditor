@@ -1,15 +1,11 @@
--fiw windows fontsize
--options other tab
 -bracket completion
 -insert spaces instead of tabulators
 -undo and redo
 -copy, cut, paste
--add mnemonics (such save CTRL - S)
+-add mnemonics (such as save CTRL - S)
 -themes(colour)
 -color picker in options
--save settings
 -change menubar and titlebar color
 -add some cool fonts
--fix combobox
 -get a better icon
 -prompt when closing without saving
