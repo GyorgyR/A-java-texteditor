@@ -32,10 +32,11 @@ public class MyTextEditor extends JFrame implements ActionListener
   //options variables and default settings
   File settings = new File("Data/Settings");
   private boolean isAutoIndentOn, isNumberingLinesOn, isHighDPIOn = false;
-  private float fontSizes = 16.0f;
+  private int fontSizes = 14;
   private float tabFontSize = 14.0f;
   private int tabSize = 8;
   private Font fontUsed = new Font("Monospaced", Font.PLAIN, 16);
+  private Font fontUsedB = new Font("Monospaced.plain", Font.PLAIN, 16);
 
   //the JScrollPane holding the JTabbedPane
   JScrollPane scrollPane;
@@ -44,8 +45,8 @@ public class MyTextEditor extends JFrame implements ActionListener
   JTabbedPane tabs;
 
   //Colours used in the application
-  Color initBackgroundColor = new Color(5,30,65);
-  Color initBackgroundColorDarker = new Color(3,20,45);
+  Color initBackgroundColor = new Color(5,35,65);
+  Color initBackgroundColorDarker = new Color(3,25,45);
   Color initForeGroundColor = new Color(236,238,225);
 
   //constructor
@@ -74,13 +75,14 @@ public class MyTextEditor extends JFrame implements ActionListener
 
   	//calculating the fonts for high dpi
   	if(isHighDPIOn) {
-  		fontSizes = 24.0f;
+  		fontSizes = 24;
   		tabFontSize = 20.0f;
   	} //if
 
     //UI settings go here
     //tweak UIManager settings
-    UIManager.put("Menu.font",menuBar.getFont().deriveFont(Font.PLAIN,fontSizes));
+    UIManager.put("Menu.font", new Font("Segoe", Font.PLAIN, fontSizes));
+    UIManager.put("MenuItem.font", new Font("Segoe", Font.PLAIN, fontSizes));
     UIManager.put("TextArea.background",initBackgroundColorDarker);
     UIManager.put("TextArea.disabledTextColor", Color.GRAY);
     UIManager.put("TextArea.foreground",initForeGroundColor);
@@ -238,6 +240,17 @@ public class MyTextEditor extends JFrame implements ActionListener
   } //saveSettings
 
   public void loadSettingsForTextTab() {
+
+    //setting everything to default
+    try {setFontOfArea(fontUsedB);}
+    catch(Exception e) {setFontOfArea(fontUsed);}
+
+    setLineNumbering(isNumberingLinesOn);
+    setAutoIndenting(isAutoIndentOn);
+    setHighDPI(isHighDPIOn,false);
+    setTabSize(tabSize);
+
+    //now change to what settings has
   	//try catch block for FileReader
   	try {
   		BufferedReader reader = new BufferedReader(new FileReader(settings));
@@ -283,8 +296,6 @@ public class MyTextEditor extends JFrame implements ActionListener
   			line = reader.readLine();
   		} //while
 
-
-
   	} catch(Exception e) {
   		e.printStackTrace();
   	}
@@ -313,9 +324,10 @@ public class MyTextEditor extends JFrame implements ActionListener
   	return f.getName()+","+f.getStyle()+","+f.getSize(); 
   } //settingFontToString
 
-  public void setHighDPI(boolean isOn) {
+  public void setHighDPI(boolean isOn, boolean save) {
   	isHighDPIOn = isOn;
-  	saveSettings();
+    if(save)
+  		saveSettings();
   } //setHighDPI
 
   public TextTab getSelectedTab() {

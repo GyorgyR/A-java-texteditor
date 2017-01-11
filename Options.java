@@ -156,7 +156,7 @@ public class Options extends JFrame implements ActionListener
     		mainEditor.setAutoIndenting(autoIndenting.isSelected());
 
     	if(event.getSource() == highdpi)
-    		mainEditor.setHighDPI(highdpi.isSelected());
+    		mainEditor.setHighDPI(highdpi.isSelected(),true);
 
     	if(event.getSource() == saveSettings)
     		mainEditor.saveSettings();
