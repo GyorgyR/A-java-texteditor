@@ -53,6 +53,7 @@ public class TextTab extends JPanel implements KeyListener{
 
 		//initializing JTextArea holding lineNumbers and adding to this JPanel
 		lineNumbers = new JTextArea();
+    lineNumbers.setEnabled(false);
 		this.add(lineNumbers, BorderLayout.WEST);
 
 		//init editorArea and add to this JPanel
@@ -109,7 +110,7 @@ public class TextTab extends JPanel implements KeyListener{
 
 	//the function that does the has text changed
 	public void setChangeInText() {
-		if( hasChangeInTextSinceLastSave && !oldText.equals(newText)) {
+		if(hasChangeInTextSinceLastSave && !oldText.equals(newText)) {
 			tabbedPane.setTitleAt(tabbedPane.getSelectedIndex(), "*"+tabTitle);
       ButtonTabComponent btc = (ButtonTabComponent) tabbedPane.getTabComponentAt(tabbedPane.getSelectedIndex());
       btc.updateThisThing();
@@ -168,7 +169,7 @@ public class TextTab extends JPanel implements KeyListener{
   public void displayLineNumbers() {
   	if(isNumberingLines) {
   		//set the textarea 
-  		lineNumbers.setColumns(3);
+  		lineNumbers.setColumns(1);
   		lineNumbers.setFont(editorArea.getFont());
   		lineNumbers.setText("");
 
@@ -195,6 +196,7 @@ public class TextTab extends JPanel implements KeyListener{
 		lineNumbers.setColumns(0);
 	}
 	
+  //avoid problems with the preferred size when resizing the window
 	Rectangle r = topFrame.getBounds();
 	topFrame.setPreferredSize(new Dimension(r.width,r.height));
 	topFrame.pack();
@@ -231,7 +233,7 @@ public class TextTab extends JPanel implements KeyListener{
   	int spaceSize = editorArea.getFontMetrics(editorArea.getFont()).stringWidth(" ");
 
   	StyleContext sc = StyleContext.getDefaultStyleContext();
-	TabSet tabs = new TabSet(new TabStop[] { new TabStop(spaceSize * size * 2) });
+	TabSet tabs = new TabSet(new TabStop[] { new TabStop(spaceSize * size) });
 	AttributeSet paraSet = sc.addAttribute(SimpleAttributeSet.EMPTY, StyleConstants.TabSet, tabs);
 	editorArea.setParagraphAttributes(paraSet, false);
   } //setTabSize
@@ -307,6 +309,7 @@ public class TextTab extends JPanel implements KeyListener{
     			currentDocument.insertString(currentDocument.getLength(),line,null);
     			//read next line
     			line = reader.readLine();
+          line = reader.readLine();
 
     			//now the next line won't be the first line 
     			isFirstLine = false;
@@ -318,6 +321,7 @@ public class TextTab extends JPanel implements KeyListener{
         		currentDocument.insertString(currentDocument.getLength(),line,null);
         		//read the next line
         		line = reader.readLine();
+            line = reader.readLine();
         	}
     	} //while
         

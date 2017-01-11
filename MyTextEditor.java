@@ -33,7 +33,7 @@ public class MyTextEditor extends JFrame implements ActionListener
   File settings = new File("Data/Settings");
   private boolean isAutoIndentOn, isNumberingLinesOn, isHighDPIOn = false;
   private float fontSizes = 16.0f;
-  private float tabFontSize = 16.0f;
+  private float tabFontSize = 14.0f;
   private int tabSize = 8;
   private Font fontUsed = new Font("Tahoma", Font.PLAIN, 16);
 
@@ -45,6 +45,7 @@ public class MyTextEditor extends JFrame implements ActionListener
 
   //Colours used in the application
   Color initBackgroundColor = new Color(5,30,65);
+  Color initBackgroundColorDarker = new Color(3,20,45);
   Color initForeGroundColor = new Color(236,238,225);
 
   //constructor
@@ -80,8 +81,8 @@ public class MyTextEditor extends JFrame implements ActionListener
     //UI settings go here
     //tweak UIManager settings
     UIManager.put("Menu.font",menuBar.getFont().deriveFont(Font.PLAIN,fontSizes));
-    UIManager.put("TextArea.background",initBackgroundColor);
-    UIManager.put("TextArea.disabledBackground", Color.GRAY);
+    UIManager.put("TextArea.background",initBackgroundColorDarker);
+    UIManager.put("TextArea.disabledTextColor", Color.GRAY);
     UIManager.put("TextArea.foreground",initForeGroundColor);
     UIManager.put("TextArea.caretForeground",initForeGroundColor);
     UIManager.put("TextPane.background",initBackgroundColor);

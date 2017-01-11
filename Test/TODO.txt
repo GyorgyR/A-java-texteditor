@@ -1,11 +1,11 @@
--bracket completion
--insert spaces instead of tabulators
--undo and redo
--copy, cut, paste
--add mnemonics (such as save CTRL - S)
--themes(colour)
--color picker in options
--change menubar and titlebar color
--add some cool fonts
+-bracket completion
+-insert spaces instead of tabulators
+-undo and redo
+-copy, cut, paste
+-add mnemonics (such as save CTRL - S)
+-prompt when closing without saving
+-themes(colour)
+-color picker in options
+-change menubar and titlebar color
+-add some cool fonts
 -get a better icon
--prompt when closing without saving
