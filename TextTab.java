@@ -220,6 +220,7 @@ public class TextTab extends JPanel implements KeyListener{
 
   public void setFontOfArea(Font font) {
   	editorArea.setFont(font);
+    setTabSize(initTabSize);
   } //setFont
 
   public Font getFontOfArea() {
@@ -232,10 +233,10 @@ public class TextTab extends JPanel implements KeyListener{
   	//getting how wide a space is in pixels
   	int spaceSize = editorArea.getFontMetrics(editorArea.getFont()).stringWidth(" ");
 
-  	StyleContext sc = StyleContext.getDefaultStyleContext();
-	TabSet tabs = new TabSet(new TabStop[] { new TabStop(spaceSize * size) });
-	AttributeSet paraSet = sc.addAttribute(SimpleAttributeSet.EMPTY, StyleConstants.TabSet, tabs);
-	editorArea.setParagraphAttributes(paraSet, false);
+    StyleContext sc = StyleContext.getDefaultStyleContext();
+	  TabSet tabs = new TabSet(new TabStop[] { new TabStop(spaceSize * size) });
+	  AttributeSet paraSet = sc.addAttribute(SimpleAttributeSet.EMPTY, StyleConstants.TabSet, tabs);
+	  editorArea.setParagraphAttributes(paraSet, false);
   } //setTabSize
 
   public int getTabSize() {

@@ -35,7 +35,7 @@ public class MyTextEditor extends JFrame implements ActionListener
   private float fontSizes = 16.0f;
   private float tabFontSize = 14.0f;
   private int tabSize = 8;
-  private Font fontUsed = new Font("Tahoma", Font.PLAIN, 16);
+  private Font fontUsed = new Font("Monospaced", Font.PLAIN, 16);
 
   //the JScrollPane holding the JTabbedPane
   JScrollPane scrollPane;
@@ -406,23 +406,4 @@ public class MyTextEditor extends JFrame implements ActionListener
     //set the active tab to the new one
     tabs.setSelectedIndex(tabs.getTabCount()-1);
   } //open
-
-  
-  
-  public static void main(String[] args)
-  {
-      MyTextEditor textEditor = new MyTextEditor();
-      textEditor.setVisible(true);
-      if(args.length > 0)
-      	for(int index = 0; index < args.length; index++)
-      	{
-      		File f = new File(args[index]);
-      		textEditor.open(f);
-      	}
-      if(args.length == 0)
-        textEditor.newFile();
-
-    //reading the settings and setting them
-    textEditor.loadSettingsForTextTab();
-  } //main
 } //MyTextEditor
