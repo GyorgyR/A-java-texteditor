@@ -1,4 +1,3 @@
--fix strange file opening behaviour
 -fix strange tab behaviour
 -when opening file set the options to the new tab
 -bracket completion

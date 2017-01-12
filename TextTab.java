@@ -310,7 +310,7 @@ public class TextTab extends JPanel implements KeyListener{
     			currentDocument.insertString(currentDocument.getLength(),line,null);
     			//read next line
     			line = reader.readLine();
-          line = reader.readLine();
+          		line = reader.readLine();
 
     			//now the next line won't be the first line 
     			isFirstLine = false;
@@ -322,7 +322,7 @@ public class TextTab extends JPanel implements KeyListener{
         		currentDocument.insertString(currentDocument.getLength(),line,null);
         		//read the next line
         		line = reader.readLine();
-            line = reader.readLine();
+            	line = reader.readLine();
         	}
     	} //while
         
