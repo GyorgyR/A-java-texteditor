@@ -310,19 +310,17 @@ public class TextTab extends JPanel implements KeyListener{
     			currentDocument.insertString(currentDocument.getLength(),line,null);
     			//read next line
     			line = reader.readLine();
-          		line = reader.readLine();
 
     			//now the next line won't be the first line 
     			isFirstLine = false;
     		}
-    		else {
+    		else if(line != "") {
         		//add lineseparator
         		currentDocument.insertString(currentDocument.getLength(),System.lineSeparator(),null);
         		//append the line
         		currentDocument.insertString(currentDocument.getLength(),line,null);
         		//read the next line
         		line = reader.readLine();
-            	line = reader.readLine();
         	}
     	} //while
         
