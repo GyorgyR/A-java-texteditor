@@ -391,6 +391,9 @@ public class MyTextEditor extends JFrame implements ActionListener
 
     //set the active tab to the new one
     tabs.setSelectedIndex(tabs.getTabCount()-1);
+
+    //load the settings for the new text tab also
+    loadSettingsForTextTab();
   } //newFile
     
   //the function that does save
@@ -417,5 +420,8 @@ public class MyTextEditor extends JFrame implements ActionListener
 
     //set the active tab to the new one
     tabs.setSelectedIndex(tabs.getTabCount()-1);
+
+    //load the settings for the new text tab also
+    loadSettingsForTextTab();
   } //open
 } //MyTextEditor
