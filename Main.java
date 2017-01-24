@@ -18,8 +18,5 @@ public class Main {
       	//else just open up a new file
       	else
         	textEditor.newFile();
-
-    	//reading the settings and setting them
-    	textEditor.loadSettingsForTextTab();
 	} //main
 }
