@@ -90,9 +90,7 @@ public class TextTab extends JPanel implements KeyListener{
 	public void keyReleased(KeyEvent e) {
 		setChangeInText();
 
-    //typing the next half of the barcket
-    if(isCompletingBrackets)
-      completeBracket(e);
+
 	} // keyReleased
 
 	public void keyTyped(KeyEvent e){
@@ -110,6 +108,12 @@ public class TextTab extends JPanel implements KeyListener{
 		//if enter has been pressed indent
 		if(e.getKeyChar() == '\n')
 			autoIndent();
+
+    //typing the next half of the bracket
+    if(isCompletingBrackets) {
+      completeBracket(e);
+      e.consume();
+    }
 
 		displayLineNumbers();
 	} // keyTyped
@@ -135,17 +139,17 @@ public class TextTab extends JPanel implements KeyListener{
       boolean isWriting = false;
 
       if(e.getKeyChar() == '{') {
-        bracketOtherHalf = "}";
+        bracketOtherHalf = "{}";
         isWriting = true;
       }
 
       if(e.getKeyChar() == '[') {
-        bracketOtherHalf = "]";
+        bracketOtherHalf = "";
         isWriting = true;
       }
 
       if(e.getKeyChar() == '(') {
-        bracketOtherHalf = ")";
+        bracketOtherHalf = "";
         isWriting = true;
       }
 
@@ -155,7 +159,7 @@ public class TextTab extends JPanel implements KeyListener{
       }
 
       if(e.getKeyChar() == '\'') {
-        bracketOtherHalf = "'";
+        bracketOtherHalf = "";
         isWriting = true;
       }
 
