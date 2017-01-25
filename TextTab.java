@@ -18,6 +18,7 @@ public class TextTab extends JPanel implements KeyListener{
 	private boolean isNumberingLines;
 	private boolean isAutoIndenting;
   private boolean isCompletingBrackets;
+  private boolean isUsingSpacesForTabs;
 
 	//the File that is currently loaded to this tab
 	private File currentFile;
@@ -85,7 +86,12 @@ public class TextTab extends JPanel implements KeyListener{
 	public void keyPressed(KeyEvent e) {
 		if(!topFrame.getTitle().contains("*"))
         	hasChangeInTextSinceLastSave = true;
-    } // keyPressed
+
+    //if we are replacing tabs and tab has been pressed replace
+    if(isUsingSpacesForTabs) {
+      replaceTabWithSpace(e);
+    }
+  } // keyPressed
 
 	public void keyReleased(KeyEvent e) {
 		setChangeInText();
@@ -112,7 +118,6 @@ public class TextTab extends JPanel implements KeyListener{
     //typing the next half of the bracket
     if(isCompletingBrackets) {
       completeBracket(e);
-      e.consume();
     }
 
 		displayLineNumbers();
@@ -132,6 +137,26 @@ public class TextTab extends JPanel implements KeyListener{
 			hasChangeInTextSinceLastSave = false;
   		} //if
   } //setChangeInText
+
+  //the function that replaces tabs with spaces
+  public void replaceTabWithSpace(KeyEvent e) {
+    if(e.getKeyChar() == '\t') {
+      String spaces = "";
+
+      for(int noOfSpaces = 1; noOfSpaces <= initTabSize; noOfSpaces++) {
+        spaces += " ";
+      } //for
+
+      //and now we write them down
+      try {
+        currentDocument.insertString(editorArea.getCaretPosition(),spaces,null);
+      } catch (BadLocationException bLE) {
+        bLE.printStackTrace();
+      } //catch
+
+      e.consume();
+    }
+  } //replaceTabWithSpace
 
   //the function that does bracket completion
   public void completeBracket(KeyEvent e) {
@@ -171,6 +196,8 @@ public class TextTab extends JPanel implements KeyListener{
         } catch (BadLocationException bLE) {
           bLE.printStackTrace();
         } //catch
+        //consome the event so it is not going to be processed
+        e.consume();
       } //if
     } //if
   } //completeBracket
@@ -332,6 +359,10 @@ public class TextTab extends JPanel implements KeyListener{
     int length = editorArea.getDocument().getLength();
 	  editorArea.getStyledDocument().setParagraphAttributes(0,length,paraSet, false);
   } //setTabSize
+
+  public void setSpaceVsTabs(boolean isOn) {
+    isUsingSpacesForTabs = isOn;
+  } //setSpaceVsTabs
 
   
 

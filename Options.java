@@ -11,7 +11,7 @@ public class Options extends JFrame implements ActionListener
 {
 	//jmenuitems in options
   	private JCheckBox wrapLine, wrapStyle, lineNumbering, autoIndenting, highdpi;
-  	private JCheckBox bracketCompletion;
+  	private JCheckBox bracketCompletion, useSpacesForTabs;
   	//the current font size
   	private JTextField fontSize, tabSize;
   	//the current font
@@ -115,7 +115,13 @@ public class Options extends JFrame implements ActionListener
     	tabSize.setSize(new Dimension(1,1));
     	tabPanel.add(tabSize);
     	tabSize.addActionListener(this);
-    	other.add(tabPanel);
+    	tab.add(tabPanel);
+
+    	//spaces instead of tabs
+    	useSpacesForTabs = new JCheckBox("Indent using spaces");
+    	useSpacesForTabs.addActionListener(this);
+    	useSpacesForTabs.setSelected(mainEditor.getSpaceVsTab());
+    	tab.add(useSpacesForTabs);
 
     	//lineNumbering
     	lineNumbering = new JCheckBox("Numbering Lines");
@@ -160,6 +166,9 @@ public class Options extends JFrame implements ActionListener
 
     	if(event.getSource() == tabSize)
     		mainEditor.setTabSize(Integer.parseInt(tabSize.getText()));
+
+    	if(event.getSource() == useSpacesForTabs)
+    		mainEditor.setSpaceVsTabs(useSpacesForTabs.isSelected());
 
     	if(event.getSource() == lineNumbering)
     		mainEditor.setLineNumbering(lineNumbering.isSelected());

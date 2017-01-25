@@ -33,7 +33,7 @@ public class MyTextEditor extends JFrame implements ActionListener
   //options variables and default settings
   File settings = new File("Data/Settings");
   private boolean isAutoIndentOn, isNumberingLinesOn, isHighDPIOn = false;
-  private boolean isBracketCompletionOn = false;
+  private boolean isBracketCompletionOn, isSpacesVsTabsOn = false;
   private int fontSizes = 14;
   private float tabFontSize = 14.0f;
   private int tabSize = 8;
@@ -365,6 +365,10 @@ public class MyTextEditor extends JFrame implements ActionListener
     return getSelectedTab().getTabSize();
   } //getTabSize
 
+  public boolean getSpaceVsTab() {
+  	return isSpacesVsTabsOn;
+  } //getSpaceVsTab
+
   public Font getFontOfArea() {
     return getSelectedTab().getFontOfArea();
   } //getFont
@@ -418,7 +422,17 @@ public class MyTextEditor extends JFrame implements ActionListener
 
     //storing for the setting file
     tabSize = size;
-  } //setTabSize  
+  } //setTabSize
+
+  public void setSpaceVsTabs(boolean isOn) {
+  	for(int index = 0; index < tabs.getTabCount(); index++) {
+        TextTab tab = (TextTab) tabs.getComponentAt(index);
+        tab.setSpaceVsTabs(isOn);
+    } //for
+
+    //storing for the setting file
+    isSpacesVsTabsOn = isOn;
+  } //setSpaceVsTabs
 
   public void setFontOfArea(Font font) {
     if(getSelectedTab() != null)
