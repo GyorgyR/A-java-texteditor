@@ -23,6 +23,9 @@ public class TextTab extends JPanel implements KeyListener{
 	//the File that is currently loaded to this tab
 	private File currentFile;
 
+  int bracketPointer = -1;
+  ArrayList lastBracketsWritten = new ArrayList();
+
 	//the title of this bar
 	public String tabTitle;
 
@@ -78,7 +81,7 @@ public class TextTab extends JPanel implements KeyListener{
 		else
 			tabTitle = "untitled";
 
-    this.setBorder(new EmptyBorder(0,0,0,0));
+    //this.setBorder(new EmptyBorder(0,0,0,0));
 		
 	} //TextTab constructor
 
@@ -163,29 +166,40 @@ public class TextTab extends JPanel implements KeyListener{
     if(isCompletingBrackets) {
       String bracketOtherHalf = "";
       boolean isWriting = false;
+      boolean isEscaping = false;
 
       if(e.getKeyChar() == '{') {
         bracketOtherHalf = "{}";
+        lastBracketsWritten.add('{');
+        bracketPointer++;
         isWriting = true;
       }
 
       if(e.getKeyChar() == '[') {
         bracketOtherHalf = "[]";
+        lastBracketsWritten.add('[');
+        bracketPointer++;
         isWriting = true;
       }
 
       if(e.getKeyChar() == '(') {
         bracketOtherHalf = "()";
+        lastBracketsWritten.add('(');
+        bracketPointer++;
         isWriting = true;
       }
 
       if(e.getKeyChar() == '"') {
         bracketOtherHalf = "\"\"";
+        lastBracketsWritten.add('"');
+        bracketPointer++;
         isWriting = true;
       }
 
       if(e.getKeyChar() == '\'') {
         bracketOtherHalf = "''";
+        lastBracketsWritten.add('\'');
+        bracketPointer++;
         isWriting = true;
       }
 
@@ -199,6 +213,37 @@ public class TextTab extends JPanel implements KeyListener{
         //consome the event so it is not going to be processed
         e.consume();
       } //if
+
+      //block to escape the next character if it is a closing bracket
+      if(e.getKeyChar() == '}' && lastBracketsWritten.get(bracketPointer).equals('{')) {
+        isEscaping = true;
+        bracketPointer--;
+      }
+
+      if(e.getKeyChar() == ']' && lastBracketsWritten.get(bracketPointer).equals('[')) {
+        isEscaping = true;
+        bracketPointer--;
+      }
+
+      if(e.getKeyChar() == ')' && lastBracketsWritten.get(bracketPointer).equals('(')) {
+        isEscaping = true;
+        bracketPointer--;
+      }
+
+      if(e.getKeyChar() == '"' && lastBracketsWritten.get(bracketPointer).equals('"')) {
+        isEscaping = true;
+        bracketPointer--;
+      }
+
+      if(e.getKeyChar() == '\'' && lastBracketsWritten.get(bracketPointer).equals('\'')) {
+        isEscaping = true;
+        bracketPointer--;
+      }
+
+      if(isEscaping) {
+        editorArea.setCaretPosition(editorArea.getCaretPosition()+1);
+        e.consume();
+      }
     } //if
   } //completeBracket
 
