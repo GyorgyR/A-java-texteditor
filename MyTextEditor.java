@@ -233,6 +233,11 @@ public class MyTextEditor extends JFrame implements ActionListener
   		fileWriter.write(""+tabSize);
   		fileWriter.write(System.lineSeparator());
 
+  		//using space instead of tabulator
+  		fileWriter.write("SpaceVsTab: ");
+  		fileWriter.write(""+isSpacesVsTabsOn);
+  		fileWriter.write(System.lineSeparator());
+
   		//numbering lines
   		fileWriter.write("LineNumbering: ");
   		fileWriter.write(""+isNumberingLinesOn);
@@ -287,6 +292,9 @@ public class MyTextEditor extends JFrame implements ActionListener
 
   			if(settings[0].equals("TabSize:"))
   				setTabSize(Integer.parseInt(settings[1]));
+
+  			if(settings[0].equals("SpaceVsTab:"))
+  				setSpaceVsTabs(Boolean.parseBoolean(settings[1]));
 
   			if(settings[0].equals("LineNumbering:"))
   				setLineNumbering(Boolean.parseBoolean(settings[1]));
