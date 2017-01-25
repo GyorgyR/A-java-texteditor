@@ -3,6 +3,7 @@ import java.awt.event.*;
 import java.io.*;
 import javax.swing.*;
 import javax.swing.text.*;
+import javax.swing.border.EmptyBorder;
 import java.util.ArrayList;
 
 /*******************************************************************************
@@ -46,6 +47,8 @@ public class TextTab extends JPanel implements KeyListener{
 	//the initial tab size
 	private int initTabSize = 8;
 
+  EmptyBorder emptyb = new EmptyBorder(0,0,0,0);
+
 	//contructor
 	public TextTab(JFrame frame, File file, JTabbedPane tabs) {
 		setLayout(new BorderLayout());
@@ -72,6 +75,8 @@ public class TextTab extends JPanel implements KeyListener{
 			open();
 		else
 			tabTitle = "untitled";
+
+    this.setBorder(new EmptyBorder(0,0,0,0));
 		
 	} //TextTab constructor
 
@@ -233,10 +238,23 @@ public class TextTab extends JPanel implements KeyListener{
   	//getting how wide a space is in pixels
   	int spaceSize = editorArea.getFontMetrics(editorArea.getFont()).stringWidth(" ");
 
+    int tabSize = size * spaceSize;
+
     StyleContext sc = StyleContext.getDefaultStyleContext();
-	  TabSet tabs = new TabSet(new TabStop[] { new TabStop(spaceSize * size) });
+
+    TabStop[] tStop = new TabStop[5];
+
+     for (int j = 0; j < tStop.length; j++)
+        {
+            int tab = j + 1;
+            tStop[j] = new TabStop(tab * tabSize);
+        }
+
+
+	  TabSet tabs = new TabSet(tStop);
 	  AttributeSet paraSet = sc.addAttribute(SimpleAttributeSet.EMPTY, StyleConstants.TabSet, tabs);
-	  editorArea.setParagraphAttributes(paraSet, false);
+    int length = editorArea.getDocument().getLength();
+	  editorArea.getStyledDocument().setParagraphAttributes(0,length,paraSet, false);
   } //setTabSize
 
   public int getTabSize() {

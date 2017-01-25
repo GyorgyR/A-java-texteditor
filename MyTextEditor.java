@@ -2,6 +2,7 @@ import java.awt.*;
 import java.awt.event.*;
 import java.io.*;
 import javax.swing.*;
+import javax.swing.border.EmptyBorder;
 import java.util.*;
 
 /*******************************************************************************
@@ -43,6 +44,7 @@ public class MyTextEditor extends JFrame implements ActionListener
 
   //the JTabbedPane holding all the TextTabs
   JTabbedPane tabs;
+  EmptyBorder emptyb = new EmptyBorder(0,0,0,0);
 
   //Colours used in the application
   Color initBackgroundColor = new Color(5,35,65);
@@ -56,9 +58,6 @@ public class MyTextEditor extends JFrame implements ActionListener
   	//the container used in this JFrame
     Container myContainer = getContentPane();
     myContainer.setLayout(new BorderLayout());
-
-    //change color of the background
-    myContainer.setBackground(scrollPaneBackground);
 
     //Need a menubar
     menuBar = new JMenuBar();
@@ -74,7 +73,7 @@ public class MyTextEditor extends JFrame implements ActionListener
   		e.printStackTrace();
   	}
 
-  	//loading the high dpi setings
+  	//loading the setings for the editor
   	loadSettingsForEditor();
 
   	//calculating the fonts for high dpi
@@ -94,6 +93,9 @@ public class MyTextEditor extends JFrame implements ActionListener
     UIManager.put("TextPane.background",initBackgroundColor);
     UIManager.put("TextPane.foreground",initForeGroundColor);
     UIManager.put("TextPane.caretForeground",initForeGroundColor);
+    //UIManager.getDefaults().put("TabbedPane.contentBorderInsets", new Insets(0,0,0,0));
+	//UIManager.getDefaults().put("TabbedPane.tabsOverlapBorder", true);
+
 
     setTitle("AWESOME text editor");
 
@@ -154,11 +156,14 @@ public class MyTextEditor extends JFrame implements ActionListener
 
     //initializing tabs
     tabs = new JTabbedPane();
+    //set border for this tabbedpane
+    tabs.setBorder(emptyb);
 
     //adding in the scroll pane
     JScrollPane scrollPane = new JScrollPane(tabs);
     //change background color
     scrollPane.getViewport().setBackground(scrollPaneBackground);
+
     myContainer.add(scrollPane,BorderLayout.CENTER);
 
     //making adjustments to the widow before opening
