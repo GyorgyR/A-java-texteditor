@@ -1,4 +1,3 @@
-  -insert spaces instead of tabulators (KeyEvent.consume())
 -wrapping
 -undo and redo
 -copy, cut, paste

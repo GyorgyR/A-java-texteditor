@@ -170,22 +170,22 @@ public class TextTab extends JPanel implements KeyListener{
       }
 
       if(e.getKeyChar() == '[') {
-        bracketOtherHalf = "";
+        bracketOtherHalf = "[]";
         isWriting = true;
       }
 
       if(e.getKeyChar() == '(') {
-        bracketOtherHalf = "";
+        bracketOtherHalf = "()";
         isWriting = true;
       }
 
       if(e.getKeyChar() == '"') {
-        bracketOtherHalf = "\"";
+        bracketOtherHalf = "\"\"";
         isWriting = true;
       }
 
       if(e.getKeyChar() == '\'') {
-        bracketOtherHalf = "";
+        bracketOtherHalf = "''";
         isWriting = true;
       }
 
@@ -345,12 +345,12 @@ public class TextTab extends JPanel implements KeyListener{
 
     StyleContext sc = StyleContext.getDefaultStyleContext();
 
-    TabStop[] tStop = new TabStop[5];
+    TabStop[] tStop = new TabStop[100];
 
      for (int j = 0; j < tStop.length; j++)
         {
             int tab = j + 1;
-            tStop[j] = new TabStop(tab * tabSize);
+            tStop[j] = new TabStop(tab * tabSize, TabStop.ALIGN_LEFT, TabStop.LEAD_NONE);
         }
 
 
