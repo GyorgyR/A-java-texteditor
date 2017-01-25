@@ -243,6 +243,11 @@ public class MyTextEditor extends JFrame implements ActionListener
   		fileWriter.write(""+isAutoIndentOn);
   		fileWriter.write(System.lineSeparator());
 
+  		//bracket completion
+  		fileWriter.write("BracketCompletion: ");
+  		fileWriter.write(""+isBracketCompletionOn);
+  		fileWriter.write(System.lineSeparator());
+
   		//high dpi
   		fileWriter.write("HighDPI: ");
   		fileWriter.write(""+isHighDPIOn);
@@ -288,6 +293,9 @@ public class MyTextEditor extends JFrame implements ActionListener
 
   			if(settings[0].equals("AutoIndent:"))
   				setAutoIndenting(Boolean.parseBoolean(settings[1]));
+
+  			if(settings[0].equals("BracketCompletion:"))
+  				setBracketCompletion(Boolean.parseBoolean(settings[1]));
 
   			line = reader.readLine();
   		} //while
