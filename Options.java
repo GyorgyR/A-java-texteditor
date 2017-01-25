@@ -11,6 +11,7 @@ public class Options extends JFrame implements ActionListener
 {
 	//jmenuitems in options
   	private JCheckBox wrapLine, wrapStyle, lineNumbering, autoIndenting, highdpi;
+  	private JCheckBox bracketCompletion;
   	//the current font size
   	private JTextField fontSize, tabSize;
   	//the current font
@@ -123,6 +124,12 @@ public class Options extends JFrame implements ActionListener
     	autoIndenting.addActionListener(this);
     	autoIndenting.setSelected(mainEditor.getAutoIndent());
 
+    	//bracketCompletion
+    	bracketCompletion = new JCheckBox("Bracket Completion");
+    	other.add(bracketCompletion);
+    	bracketCompletion.addActionListener(this);
+    	bracketCompletion.setSelected(mainEditor.getBracketCompletion());
+
     	//highdpi
     	highdpi = new JCheckBox("High-DPI Monitor");
     	highdpi.addActionListener(this);
@@ -155,6 +162,9 @@ public class Options extends JFrame implements ActionListener
     	if(event.getSource() == autoIndenting)
     		mainEditor.setAutoIndenting(autoIndenting.isSelected());
 
+    	if(event.getSource() == bracketCompletion)
+    		mainEditor.setBracketCompletion(bracketCompletion.isSelected());
+
     	if(event.getSource() == highdpi)
     		mainEditor.setHighDPI(highdpi.isSelected(),true);
 
@@ -162,9 +172,3 @@ public class Options extends JFrame implements ActionListener
     		mainEditor.saveSettings();
 	} // actionPerformed
 } //Options
-
-//font
-
-
-    
-    

@@ -33,6 +33,7 @@ public class MyTextEditor extends JFrame implements ActionListener
   //options variables and default settings
   File settings = new File("Data/Settings");
   private boolean isAutoIndentOn, isNumberingLinesOn, isHighDPIOn = false;
+  private boolean isBracketCompletionOn = false;
   private int fontSizes = 14;
   private float tabFontSize = 14.0f;
   private int tabSize = 8;
@@ -211,6 +212,11 @@ public class MyTextEditor extends JFrame implements ActionListener
     if(event.getSource() == options)
     	new Options(this).setVisible(true);
   } //actionPerformed
+//------------------------------------------------------------------------------
+
+  			/***********************************
+  		   			Settings Save-Load
+  			************************************/
 
   public void saveSettings() {
   	//try catch block for the fileWriter
@@ -312,6 +318,21 @@ public class MyTextEditor extends JFrame implements ActionListener
   	}
   } //loadSettingsForEditor
 
+  public Font settingsReadFont(String line) {
+  	String[] font = line.split(",");
+  	int style = Integer.parseInt(font[1]);
+  	int size = Integer.parseInt(font[2]);
+  	return new Font(font[0],style,size);
+  } //settingsReadFont\
+
+  public String settingsFontToString(Font f) {
+  	return f.getName()+","+f.getStyle()+","+f.getSize(); 
+  } //settingFontToString
+
+  			/***********************************
+  							Getters
+  			************************************/
+
   public boolean getLineNumbering() {
   	return isNumberingLinesOn;
   } //getLineNumbering
@@ -324,27 +345,31 @@ public class MyTextEditor extends JFrame implements ActionListener
   	return isHighDPIOn;
   } //getHighDPI
 
-  public Font settingsReadFont(String line) {
-  	String[] font = line.split(",");
-  	int style = Integer.parseInt(font[1]);
-  	int size = Integer.parseInt(font[2]);
-  	return new Font(font[0],style,size);
-  } //settingsReadFont
+  public boolean getBracketCompletion() {
+  	return isBracketCompletionOn;
+  }
 
-  public String settingsFontToString(Font f) {
-  	return f.getName()+","+f.getStyle()+","+f.getSize(); 
-  } //settingFontToString
+  public TextTab getSelectedTab() {
+    return (TextTab)tabs.getSelectedComponent();
+  } //getSelectedTab
+
+  public int getTabSize() {
+    return getSelectedTab().getTabSize();
+  } //getTabSize
+
+  public Font getFontOfArea() {
+    return getSelectedTab().getFontOfArea();
+  } //getFont
+
+  			/***********************************
+  							Setters
+  			************************************/
 
   public void setHighDPI(boolean isOn, boolean save) {
   	isHighDPIOn = isOn;
     if(save)
   		saveSettings();
   } //setHighDPI
-
-  public TextTab getSelectedTab() {
-    return (TextTab)tabs.getSelectedComponent();
-
-  } //getSelectedTab
 
   //function to set the line numbering for all tabs
   public void setLineNumbering(boolean isOn) {
@@ -367,6 +392,16 @@ public class MyTextEditor extends JFrame implements ActionListener
     isAutoIndentOn = isOn;
   } //setAutoIndenting
 
+  public void setBracketCompletion(boolean isOn) {
+  	for(int index = 0; index < tabs.getTabCount(); index++) {
+        TextTab tab = (TextTab) tabs.getComponentAt(index);
+        tab.setBracketCompletion(isOn);
+    } //for
+
+    //storing for the setting file
+    isBracketCompletionOn = isOn;
+  }
+
   public void setTabSize(int size) {
     for(int index = 0; index < tabs.getTabCount(); index++) {
         TextTab tab = (TextTab) tabs.getComponentAt(index);
@@ -375,11 +410,7 @@ public class MyTextEditor extends JFrame implements ActionListener
 
     //storing for the setting file
     tabSize = size;
-  } //setTabSize
-
-  public int getTabSize() {
-    return getSelectedTab().getTabSize();
-  } //getTabSize
+  } //setTabSize  
 
   public void setFontOfArea(Font font) {
     if(getSelectedTab() != null)
@@ -389,9 +420,9 @@ public class MyTextEditor extends JFrame implements ActionListener
     fontUsed = font;
   } //setFont
 
-  public Font getFontOfArea() {
-    return getSelectedTab().getFontOfArea();
-  } //getFont
+  			/***********************************
+  			  			File Actions
+  			************************************/
     
   //the function that starts a new file
   public void newFile()

@@ -1,5 +1,5 @@
--fix strange tab behaviour
--bracket completion
+  -bracket completion
+-wrapping
 -insert spaces instead of tabulators
 -undo and redo
 -copy, cut, paste

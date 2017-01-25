@@ -17,6 +17,7 @@ public class TextTab extends JPanel implements KeyListener{
 	//settings variables
 	private boolean isNumberingLines;
 	private boolean isAutoIndenting;
+  private boolean isCompletingBrackets;
 
 	//the File that is currently loaded to this tab
 	private File currentFile;
@@ -88,6 +89,10 @@ public class TextTab extends JPanel implements KeyListener{
 
 	public void keyReleased(KeyEvent e) {
 		setChangeInText();
+
+    //typing the next half of the barcket
+    if(isCompletingBrackets)
+      completeBracket(e);
 	} // keyReleased
 
 	public void keyTyped(KeyEvent e){
@@ -109,9 +114,9 @@ public class TextTab extends JPanel implements KeyListener{
 		displayLineNumbers();
 	} // keyTyped
 
-	public JTextPane getTextPane() {
-		return editorArea;
-	} // getTextPane
+      /***********************************
+                    Doers
+      ************************************/  
 
 	//the function that does the has text changed
 	public void setChangeInText() {
@@ -121,7 +126,48 @@ public class TextTab extends JPanel implements KeyListener{
       btc.updateThisThing();
 			hasChangeInTextSinceLastSave = false;
   		} //if
-  	} //setChangeInText
+  } //setChangeInText
+
+  //the function that does bracket completion
+  public void completeBracket(KeyEvent e) {
+    if(isCompletingBrackets) {
+      String bracketOtherHalf = "";
+      boolean isWriting = false;
+
+      if(e.getKeyChar() == '{') {
+        bracketOtherHalf = "}";
+        isWriting = true;
+      }
+
+      if(e.getKeyChar() == '[') {
+        bracketOtherHalf = "]";
+        isWriting = true;
+      }
+
+      if(e.getKeyChar() == '(') {
+        bracketOtherHalf = ")";
+        isWriting = true;
+      }
+
+      if(e.getKeyChar() == '"') {
+        bracketOtherHalf = "\"";
+        isWriting = true;
+      }
+
+      if(e.getKeyChar() == '\'') {
+        bracketOtherHalf = "'";
+        isWriting = true;
+      }
+
+      if(isWriting) {
+        try {
+          currentDocument.insertString(editorArea.getCaretPosition(),bracketOtherHalf,null);
+        } catch (BadLocationException bLE) {
+          bLE.printStackTrace();
+        } //catch
+      } //if
+    } //if
+  } //completeBracket
 
     //the function that does the auto indent
   public void autoIndent() {
@@ -165,12 +211,9 @@ public class TextTab extends JPanel implements KeyListener{
         }
 
   	} //if
-  } // autoIndent
+  } // autoIndent 
 
-  public void setAutoIndent(boolean isOn) {
-  	isAutoIndenting = isOn;
-  } //setAutoIndent
-
+  //function that does the line numbering 
   public void displayLineNumbers() {
   	if(isNumberingLines) {
   		//set the textarea 
@@ -208,29 +251,58 @@ public class TextTab extends JPanel implements KeyListener{
 
   } // displayLineNumbers
 
-  public void setLineNumbering(boolean isOn) {
-  	isNumberingLines = isOn;
-  	try{
-		newText = currentDocument.getText(0,currentDocument.getLength()).split("\\n", -1);
-	} 
-	catch (BadLocationException exception) {
-		exception.printStackTrace();
-	}
-  	displayLineNumbers();
-  } //setLineNumbering
+      /***********************************
+                  Getters
+      ************************************/
 
   public String getName() {
   	return tabTitle;
   } //getName
 
+  public int getTabSize() {
+    return initTabSize;
+  } //getTabSize
+
+  public Font getFontOfArea() {
+    return editorArea.getFont();
+  } //getFont
+
+  public JTextPane getTextPane() {
+    return editorArea;
+  } // getTextPane
+
+  public boolean getBracketCompletion() {
+    return isCompletingBrackets;
+  } //getBracketCompletion
+
+      /***********************************
+                  Setters
+      ************************************/
+
+  public void setAutoIndent(boolean isOn) {
+    isAutoIndenting = isOn;
+  } //setAutoIndent
+
+  public void setLineNumbering(boolean isOn) {
+    isNumberingLines = isOn;
+    try{
+      newText = currentDocument.getText(0,currentDocument.getLength()).split("\\n", -1);
+    } 
+    catch (BadLocationException exception) {
+      exception.printStackTrace();
+    }
+    
+    displayLineNumbers();
+  } //setLineNumbering
+
+  public void setBracketCompletion(boolean isOn) {
+    isCompletingBrackets = isOn;
+  } //setBracketCompletion
+
   public void setFontOfArea(Font font) {
   	editorArea.setFont(font);
     setTabSize(initTabSize);
   } //setFont
-
-  public Font getFontOfArea() {
-  	return editorArea.getFont();
-  } //getFont
 
   public void setTabSize(int size) {
   	//setting the teab size to the new value
@@ -257,9 +329,7 @@ public class TextTab extends JPanel implements KeyListener{
 	  editorArea.getStyledDocument().setParagraphAttributes(0,length,paraSet, false);
   } //setTabSize
 
-  public int getTabSize() {
-  	return initTabSize;
-  } //getTabSize
+  
 
   //the function that does save
   public void save()
