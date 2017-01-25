@@ -94,8 +94,8 @@ public class MyTextEditor extends JFrame implements ActionListener
     UIManager.put("TextPane.background",initBackgroundColor);
     UIManager.put("TextPane.foreground",initForeGroundColor);
     UIManager.put("TextPane.caretForeground",initForeGroundColor);
-    //UIManager.getDefaults().put("TabbedPane.contentBorderInsets", new Insets(0,0,0,0));
-	//UIManager.getDefaults().put("TabbedPane.tabsOverlapBorder", true);
+    UIManager.getDefaults().put("TabbedPane.contentBorderInsets", new Insets(0,0,0,0));
+	UIManager.getDefaults().put("TabbedPane.tabsOverlapBorder", true);
 
 
     setTitle("AWESOME text editor");
