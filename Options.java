@@ -63,6 +63,10 @@ public class Options extends JFrame implements ActionListener
 		JPanel wrap = new JPanel();
 		wrap.setLayout(new GridLayout(0,1));
 
+		//tab for everything regarding tabulators
+		JPanel tab = new JPanel();
+		tab.setLayout(new GridLayout(0,1));
+
 		//tab for other options
 		JPanel other = new JPanel();
 		other.setLayout(new GridLayout(0,1));
@@ -70,6 +74,7 @@ public class Options extends JFrame implements ActionListener
 		//adding JPanels to the tabbedpane as tabs
 		tabbedPane.addTab("Font",font);
 		//tabbedPane.addTab("Wrap",wrap);
+		tabbedPane.addTab("Tabulator",tab);
 		tabbedPane.addTab("Other",other);
 
 		//fontsize

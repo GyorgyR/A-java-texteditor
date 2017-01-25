@@ -118,6 +118,7 @@ public class TextTab extends JPanel implements KeyListener{
 		displayLineNumbers();
 	} // keyTyped
 
+
       /***********************************
                     Doers
       ************************************/  
@@ -166,6 +167,7 @@ public class TextTab extends JPanel implements KeyListener{
       if(isWriting) {
         try {
           currentDocument.insertString(editorArea.getCaretPosition(),bracketOtherHalf,null);
+          editorArea.setCaretPosition(editorArea.getCaretPosition()-1);
         } catch (BadLocationException bLE) {
           bLE.printStackTrace();
         } //catch
@@ -255,6 +257,7 @@ public class TextTab extends JPanel implements KeyListener{
 
   } // displayLineNumbers
 
+
       /***********************************
                   Getters
       ************************************/
@@ -275,9 +278,6 @@ public class TextTab extends JPanel implements KeyListener{
     return editorArea;
   } // getTextPane
 
-  public boolean getBracketCompletion() {
-    return isCompletingBrackets;
-  } //getBracketCompletion
 
       /***********************************
                   Setters
