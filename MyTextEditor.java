@@ -120,7 +120,7 @@ public class MyTextEditor extends JFrame implements ActionListener
                     ************************/
     //new
     newfile = new JMenuItem("New File");
-    newFile.setAccelerator(KeyStroke.getKeyStroke(
+    newfile.setAccelerator(KeyStroke.getKeyStroke(
     	KeyEvent.VK_N,ActionEvent.CTRL_MASK));
     newfile.addActionListener(this);
     file.add(newfile);
@@ -142,7 +142,7 @@ public class MyTextEditor extends JFrame implements ActionListener
     //save as..
     saveas = new JMenuItem("Save File as..");
     saveas.setAccelerator(KeyStroke.getKeyStroke(
-    	KeyEvent.VK_S,ActionEvent.CTRL_MASK,ActionEvent.ALT_MASK));
+    	KeyEvent.VK_S,ActionEvent.ALT_MASK));
     saveas.addActionListener(this);
     file.add(saveas);
     
