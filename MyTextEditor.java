@@ -120,24 +120,31 @@ public class MyTextEditor extends JFrame implements ActionListener
                     ************************/
     //new
     newfile = new JMenuItem("New File");
-    file.add(newfile);
+    newFile.setAccelerator(KeyStroke.getKeyStroke(
+    	KeyEvent.VK_N,ActionEvent.CTRL_MASK));
     newfile.addActionListener(this);
+    file.add(newfile);
     
     //open
     open = new JMenuItem("Open File...");
-    file.add(open);
+    open.setAccelerator(KeyStroke.getKeyStroke(
+    	KeyEvent.VK_O,ActionEvent.CTRL_MASK));
     open.addActionListener(this);
+    file.add(open);
     
     //save
     save = new JMenuItem("Save File");
-    save.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_S,ActionEvent.CTRL_MASK));
+    save.setAccelerator(KeyStroke.getKeyStroke(
+    	KeyEvent.VK_S,ActionEvent.CTRL_MASK));
     save.addActionListener(this);
     file.add(save);
     
     //save as..
     saveas = new JMenuItem("Save File as..");
-    file.add(saveas);
+    saveas.setAccelerator(KeyStroke.getKeyStroke(
+    	KeyEvent.VK_S,ActionEvent.CTRL_MASK,ActionEvent.ALT_MASK));
     saveas.addActionListener(this);
+    file.add(saveas);
     
     //exit
     exit = new JMenuItem("Exit");
