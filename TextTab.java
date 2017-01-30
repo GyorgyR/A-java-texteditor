@@ -94,9 +94,6 @@ public class TextTab extends JPanel implements KeyListener{
     if(isUsingSpacesForTabs) {
       replaceTabWithSpace(e);
     } //if
-
-    if(e.isControlDown() && e.getKeyChar() == 's')
-      save();
   } // keyPressed
 
 	public void keyReleased(KeyEvent e) {
@@ -450,15 +447,18 @@ public class TextTab extends JPanel implements KeyListener{
         editorArea.write(writer);
         currentFile = fileBrowser.getSelectedFile();
         hasChangeInTextSinceLastSave = false;
+        String tabTitleGet = fileBrowser.getSelectedFile().getName();
+      if(tabTitleGet != null) {
+        tabTitle = tabTitleGet;
+        tabbedPane.setTitleAt(tabbedPane.getSelectedIndex(),tabTitle);
+    } //if
 
       } //try
       catch (Exception e)
       {
-      
+        e.printStackTrace();
       } //catch
     } //if
-    tabTitle = fileBrowser.getSelectedFile().getName();
-    tabbedPane.setTitleAt(tabbedPane.getSelectedIndex(),tabTitle);
   } //saveas
 
   //this method opens the curently selected file

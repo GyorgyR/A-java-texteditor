@@ -130,8 +130,9 @@ public class MyTextEditor extends JFrame implements ActionListener
     
     //save
     save = new JMenuItem("Save File");
-    file.add(save);
+    save.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_S,ActionEvent.CTRL_MASK));
     save.addActionListener(this);
+    file.add(save);
     
     //save as..
     saveas = new JMenuItem("Save File as..");
