@@ -93,7 +93,10 @@ public class TextTab extends JPanel implements KeyListener{
     //if we are replacing tabs and tab has been pressed replace
     if(isUsingSpacesForTabs) {
       replaceTabWithSpace(e);
-    }
+    } //if
+
+    if(e.isControlDown() && e.getKeyChar() == 's')
+      save();
   } // keyPressed
 
 	public void keyReleased(KeyEvent e) {
@@ -482,14 +485,16 @@ public class TextTab extends JPanel implements KeyListener{
     			//now the next line won't be the first line 
     			isFirstLine = false;
     		}
-    		else if(line != "") {
+    		else if(!line.isEmpty()) {
         		//add lineseparator
         		currentDocument.insertString(currentDocument.getLength(),System.lineSeparator(),null);
         		//append the line
         		currentDocument.insertString(currentDocument.getLength(),line,null);
         		//read the next line
         		line = reader.readLine();
-        	}
+        	} else if(line.isEmpty())
+            line = reader.readLine();
+
     	} //while
         
         reader.close();

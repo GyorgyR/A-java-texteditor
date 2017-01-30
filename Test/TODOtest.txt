@@ -1,13 +1,14 @@
--fix strange tab behaviour
--when opening file set the options to the new tab
--bracket completion
--insert spaces instead of tabulators
--undo and redo
--copy, cut, paste
--add mnemonics (such as save CTRL - S)
--prompt when closing without saving
--themes(colour)
--color picker in options
--change menubar and titlebar color
--add some cool fonts
--get a better icon
+-fix strange tab behaviour
+-when opening file set the options to the new tab
+-bracket completion
+-insert spaces instead of tabulators
+-undo and redo
+-copy, cut, paste
+-add mnemonics (such as save CTRL - S)
+-prompt when closing without saving
+-themes(colour)
+-color picker in options
+-change menubar and titlebar color
+-add some cool fonts
+-get a better icon
+-testing save thingy 
