@@ -177,7 +177,8 @@ public class MyTextEditor extends JFrame implements ActionListener
 
     //making adjustments to the widow before opening
     myContainer.setPreferredSize(new Dimension(600,800));
-    setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+    setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
+    addWindowListener(new AreYouSure(this));
     pack();
   } //MyTextEditor constructor
   
