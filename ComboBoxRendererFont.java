@@ -7,7 +7,7 @@ Date: 29/12/2016
 ----------------------------------------------------------
 This is a custom renderer for the font JComboBox 
 *********************************************************/
-public class ComboBoxRendererFont extends JLabel implements ListCellRenderer
+public class ComboBoxRendererFont extends JLabel implements ListCellRenderer<Object>
 {
 	private JLabel labelItem = new JLabel();
 	public ComboBoxRendererFont() 
