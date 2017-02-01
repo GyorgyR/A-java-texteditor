@@ -24,7 +24,7 @@ public class TextTab extends JPanel implements KeyListener{
 	private File currentFile;
 
   int bracketPointer = -1;
-  ArrayList lastBracketsWritten = new ArrayList();
+  ArrayList<Character> lastBracketsWritten = new ArrayList<Character>();
 
 	//the title of this bar
 	public String tabTitle;
