@@ -20,6 +20,9 @@ public class TextTab extends JPanel implements KeyListener{
   private boolean isCompletingBrackets;
   private boolean isUsingSpacesForTabs;
 
+  //boolean to check if the content is saved
+  private boolean isSaved;
+
 	//the File that is currently loaded to this tab
 	private File currentFile;
 
@@ -46,7 +49,7 @@ public class TextTab extends JPanel implements KeyListener{
 	//boolean to know if text has changed
 	private boolean hasChangeInTextSinceLastSave;
 
-	//reference to the tabbep pane this is in
+	//reference to the tabbed pane this is in
 	private JTabbedPane tabbedPane;
 
 	//the initial tab size
@@ -72,6 +75,9 @@ public class TextTab extends JPanel implements KeyListener{
 
 		//getting the JFrame of the parent
 		topFrame = frame;
+
+    //the opened file is saved
+    isSaved = true;
 
 		//opening if file has been given 
 		currentFile = file;
@@ -138,6 +144,7 @@ public class TextTab extends JPanel implements KeyListener{
       ButtonTabComponent btc = (ButtonTabComponent) tabbedPane.getTabComponentAt(tabbedPane.getSelectedIndex());
       btc.updateThisThing();
 			hasChangeInTextSinceLastSave = false;
+      isSaved = false;
   		} //if
   } //setChangeInText
 
@@ -350,6 +357,10 @@ public class TextTab extends JPanel implements KeyListener{
     return editorArea;
   } // getTextPane
 
+  public boolean getIsSaved() {
+    return isSaved;
+  } //getIsSaved
+
 
       /***********************************
                   Setters
@@ -423,13 +434,14 @@ public class TextTab extends JPanel implements KeyListener{
       {
         editorArea.write(writer);
         hasChangeInTextSinceLastSave = false;
+        tabbedPane.setTitleAt(tabbedPane.getSelectedIndex(),tabTitle);
+        isSaved = true;
       } //try
       catch (Exception e)
       {
       	e.printStackTrace();
       } //catch
     } //else
-    tabbedPane.setTitleAt(tabbedPane.getSelectedIndex(),tabTitle);
   } //save
 
   //the function that does save as

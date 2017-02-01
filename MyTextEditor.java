@@ -15,7 +15,7 @@ public class MyTextEditor extends JFrame implements ActionListener
 {
 
   //This will hold the icon set to this JFrame
-  ImageIcon programIcon;
+  private ImageIcon programIcon;
 
   //just a jmenubar
   private JMenuBar menuBar;
@@ -39,12 +39,15 @@ public class MyTextEditor extends JFrame implements ActionListener
   private int tabSize = 8;
   private Font fontUsed = new Font("Monospaced", Font.PLAIN, 16);
   private Font fontUsedB = new Font("Monospaced.plain", Font.PLAIN, 16);
+  //private boolean saved = false;
 
   //the JScrollPane holding the JTabbedPane
   JScrollPane scrollPane;
 
   //the JTabbedPane holding all the TextTabs
   JTabbedPane tabs;
+
+  //an emptyborder
   EmptyBorder emptyb = new EmptyBorder(0,0,0,0);
 
   //Colours used in the application
@@ -95,7 +98,7 @@ public class MyTextEditor extends JFrame implements ActionListener
     UIManager.put("TextPane.foreground",initForeGroundColor);
     UIManager.put("TextPane.caretForeground",initForeGroundColor);
     UIManager.getDefaults().put("TabbedPane.contentBorderInsets", new Insets(0,0,0,0));
-	UIManager.getDefaults().put("TabbedPane.tabsOverlapBorder", true);
+    UIManager.getDefaults().put("TabbedPane.tabsOverlapBorder", true);
 
 
     setTitle("AWESOME text editor");
@@ -389,6 +392,21 @@ public class MyTextEditor extends JFrame implements ActionListener
   public Font getFontOfArea() {
     return getSelectedTab().getFontOfArea();
   } //getFont
+
+  public boolean getActiveTabSaved() {
+
+    boolean isAllSaved = true;
+
+    //going through all the tabs and if there is at least one which was not saved 
+    //then we will return false 
+    for(int index = 0; index < tabs.getTabCount(); index++) {
+        TextTab tab = (TextTab) tabs.getComponentAt(index);
+        if(!tab.getIsSaved())
+          isAllSaved = false;
+    } //for
+
+    return isAllSaved;
+  }
 
   			/***********************************
   							Setters

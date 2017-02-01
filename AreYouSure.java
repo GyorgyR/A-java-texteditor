@@ -10,15 +10,20 @@ public class AreYouSure extends WindowAdapter {
         textEditor = _textEditor;
 
     } //constructor
-        public void windowClosing( WindowEvent e ) {  
-            int option = JOptionPane.showOptionDialog(  
-                    textEditor,  
-                    "Are you sure you want to quit?",  
-                    "Exit Dialog", JOptionPane.YES_NO_OPTION,  
-                    JOptionPane.WARNING_MESSAGE, null, null,  
-                    null );  
-            if( option == JOptionPane.YES_OPTION ) {  
-                System.exit( 0 );  
-            }  
-        }  
-    }
+        public void windowClosing( WindowEvent e ) {
+        if(!textEditor.getActiveTabSaved()) {  
+                int option = JOptionPane.showOptionDialog(  
+                        textEditor,  
+                        "Are you sure you want to exit?",  
+                        "Exit Dialog", JOptionPane.YES_NO_OPTION,  
+                        JOptionPane.WARNING_MESSAGE, null, null,  
+                        null );
+
+                if( option == JOptionPane.YES_OPTION ) {  
+                    System.exit( 0 );  
+                } //if
+            } //if
+            else
+                System.exit(0);  
+        } //windowClosing  
+    } //AreYouSure

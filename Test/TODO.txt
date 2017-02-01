@@ -2,7 +2,7 @@
 -undo and redo
 -copy, cut, paste
 -add mnemonics (such as save CTRL - S)
--prompt when closing without saving
+-add save all
 -themes(colour)
 -color picker in options
 -change menubar and titlebar color
