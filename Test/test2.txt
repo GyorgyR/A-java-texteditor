@@ -1,5 +1,9 @@
-elsÅ‘ sor
-mÃ¡sodik sor
-harmadik sor
-negyedik sor
-Ã¶tÃ¶dik sor
+elsõ sor
+második sor
+harmadik sor
+negyedik sor
+ötödik sor
+hatodik sor
+hetedik sor
+nyolcadik sor
+kilencedik sor

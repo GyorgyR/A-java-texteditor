@@ -15,9 +15,8 @@ public class AreYouSure extends WindowAdapter {
                 int option = JOptionPane.showOptionDialog(  
                         textEditor,  
                         "Are you sure you want to exit?",  
-                        "Exit Dialog", JOptionPane.YES_NO_OPTION,  
-                        JOptionPane.WARNING_MESSAGE, null, null,  
-                        null );
+                        "AWESOME text editor", JOptionPane.YES_NO_OPTION,  
+                        JOptionPane.WARNING_MESSAGE,null,null,null);
 
                 if( option == JOptionPane.YES_OPTION ) {  
                     System.exit( 0 );  

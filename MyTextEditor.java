@@ -25,7 +25,7 @@ public class MyTextEditor extends JFrame implements ActionListener
   private JMenu file, edit, help, credits;
 
   //jmenuitems in file
-  private JMenuItem newfile, open, save, saveas, exit;
+  private JMenuItem newfile, open, save, saveas, saveall, exit;
 
   //jmenuitems in edit
   private JMenuItem options;
@@ -141,6 +141,13 @@ public class MyTextEditor extends JFrame implements ActionListener
     	KeyEvent.VK_S,ActionEvent.CTRL_MASK));
     save.addActionListener(this);
     file.add(save);
+
+    //saveall
+    saveall = new JMenuItem("Save all");
+    //saveall.setAccelerator(KeyStroke.getKeyStroke(
+      //KeyEvent.VK_S, KeyEvent.VK_A, ActionEvent.CTRL_MASK));
+    saveall.addActionListener(this);
+    file.add(saveall);
     
     //save as..
     saveas = new JMenuItem("Save File as..");
@@ -210,6 +217,9 @@ public class MyTextEditor extends JFrame implements ActionListener
   
     if(event.getSource() == save)
       save();
+
+    if(event.getSource() == saveall)
+      saveAll();
   
     if(event.getSource() == saveas)
       saveas();
@@ -484,7 +494,7 @@ public class MyTextEditor extends JFrame implements ActionListener
   //the function that starts a new file
   public void newFile()
   {
-    tabs.add(new TextTab(this,null,tabs));
+    tabs.add(new TextTab(this,null,tabs,tabs.getTabCount()));
     tabs.setTabComponentAt(tabs.getTabCount()-1, 
     								new ButtonTabComponent(tabs, tabFontSize));
 
@@ -501,6 +511,13 @@ public class MyTextEditor extends JFrame implements ActionListener
     //here we will get the save method from the active 
     getSelectedTab().save();
   } //save
+
+  public void saveAll() {
+    for(int index = 0; index < tabs.getTabCount(); index++) {
+      TextTab tab = (TextTab)tabs.getComponentAt(index);
+      tab.saveThisTab(index);
+    } //for
+  } //saveAll
   
   //the function that does save as
   public void saveas()
@@ -513,7 +530,7 @@ public class MyTextEditor extends JFrame implements ActionListener
   public void open(File file)
   {
     //add a new tab with the file opened
-    tabs.add(new TextTab(this,file,tabs));
+    tabs.add(new TextTab(this,file,tabs,tabs.getTabCount()));
     tabs.setTabComponentAt(tabs.getTabCount()-1, 
     								new ButtonTabComponent(tabs, tabFontSize));
 

@@ -1,10 +1,10 @@
 -wrapping
 -undo and redo
 -copy, cut, paste
--add mnemonics (such as save CTRL - S)
--add save all
+-filebrowser save route
+  -better getIndexOfthisTab method
 -themes(colour)
 -color picker in options
 -change menubar and titlebar color
--add some cool fonts
+-add some cool fonts ?
 -get a better icon

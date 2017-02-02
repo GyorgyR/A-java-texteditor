@@ -11,4 +11,5 @@
 -change menubar and titlebar color
 -add some cool fonts
 -get a better icon
--testing save thingy 
+-testing save thingy 
+-save all and everything

@@ -26,11 +26,15 @@ public class TextTab extends JPanel implements KeyListener{
 	//the File that is currently loaded to this tab
 	private File currentFile;
 
+  //bracket completion variables
   int bracketPointer = -1;
   ArrayList<Character> lastBracketsWritten = new ArrayList<Character>();
 
 	//the title of this bar
 	public String tabTitle;
+
+  //the index of this tab
+  private int indexOfThisTab;
 
 	//the text in variables
 	private String[] oldText;
@@ -58,9 +62,11 @@ public class TextTab extends JPanel implements KeyListener{
   EmptyBorder emptyb = new EmptyBorder(0,0,0,0);
 
 	//contructor
-	public TextTab(JFrame frame, File file, JTabbedPane tabs) {
+	public TextTab(JFrame frame, File file, JTabbedPane tabs, int index) {
 		setLayout(new BorderLayout());
 		tabbedPane = tabs;
+
+    indexOfThisTab = index;
 
 		//initializing JTextArea holding lineNumbers and adding to this JPanel
 		lineNumbers = new JTextArea();
@@ -420,8 +426,6 @@ public class TextTab extends JPanel implements KeyListener{
     isUsingSpacesForTabs = isOn;
   } //setSpaceVsTabs
 
-  
-
   //the function that does save
   public void save()
   {
@@ -443,6 +447,27 @@ public class TextTab extends JPanel implements KeyListener{
       } //catch
     } //else
   } //save
+
+  public void saveThisTab(int indexThisTab) {
+    //if this is the first save need to know where to save
+    if (currentFile == null)
+      saveas();
+    else
+    {
+      try(FileWriter writer = new FileWriter(currentFile))
+      {
+        editorArea.write(writer);
+        hasChangeInTextSinceLastSave = false;
+        tabbedPane.setTitleAt(indexThisTab,tabTitle);
+        isSaved = true;
+      } //try
+      catch (Exception e)
+      {
+        e.printStackTrace();
+      } //catch
+    } //else
+
+  } //saveThisTab
 
   //the function that does save as
   public void saveas()
