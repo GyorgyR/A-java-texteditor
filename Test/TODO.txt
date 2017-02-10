@@ -2,8 +2,7 @@
 -undo and redo
 -copy, cut, paste
 -filebrowser save route
-  -better getIndexOfthisTab method
--themes(colour)
+  -themes(colour)
 -color picker in options
 -change menubar and titlebar color
 -add some cool fonts ?

@@ -88,8 +88,8 @@ public class MyTextEditor extends JFrame implements ActionListener
 
     //UI settings go here
     //tweak UIManager settings
-    UIManager.put("Menu.font", new Font("Segoe", Font.PLAIN, fontSizes));
-    UIManager.put("MenuItem.font", new Font("Segoe", Font.PLAIN, fontSizes));
+    UIManager.put("Menu.font", new Font("Arial", Font.PLAIN, fontSizes));
+    UIManager.put("MenuItem.font", new Font("Arial", Font.PLAIN, fontSizes));
     UIManager.put("TextArea.background",initBackgroundColorDarker);
     UIManager.put("TextArea.disabledTextColor", Color.GRAY);
     UIManager.put("TextArea.foreground",initForeGroundColor);
@@ -486,6 +486,11 @@ public class MyTextEditor extends JFrame implements ActionListener
     //storing for the setting file
     fontUsed = font;
   } //setFont
+
+  public void setColorTheme(ColorTheme colours) {
+    
+
+  } //setColorTheme
 
   			/***********************************
   			  			File Actions

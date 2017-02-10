@@ -33,9 +33,6 @@ public class TextTab extends JPanel implements KeyListener{
 	//the title of this bar
 	public String tabTitle;
 
-  //the index of this tab
-  private int indexOfThisTab;
-
 	//the text in variables
 	private String[] oldText;
 	private String[] newText;
@@ -65,8 +62,6 @@ public class TextTab extends JPanel implements KeyListener{
 	public TextTab(JFrame frame, File file, JTabbedPane tabs, int index) {
 		setLayout(new BorderLayout());
 		tabbedPane = tabs;
-
-    indexOfThisTab = index;
 
 		//initializing JTextArea holding lineNumbers and adding to this JPanel
 		lineNumbers = new JTextArea();
@@ -230,26 +225,31 @@ public class TextTab extends JPanel implements KeyListener{
       //block to escape the next character if it is a closing bracket
       if(e.getKeyChar() == '}' && lastBracketsWritten.get(bracketPointer).equals('{')) {
         isEscaping = true;
+        lastBracketsWritten.remove(bracketPointer);
         bracketPointer--;
       }
 
       if(e.getKeyChar() == ']' && lastBracketsWritten.get(bracketPointer).equals('[')) {
         isEscaping = true;
+        lastBracketsWritten.remove(bracketPointer);
         bracketPointer--;
       }
 
       if(e.getKeyChar() == ')' && lastBracketsWritten.get(bracketPointer).equals('(')) {
         isEscaping = true;
+        lastBracketsWritten.remove(bracketPointer);
         bracketPointer--;
       }
 
       if(e.getKeyChar() == '"' && lastBracketsWritten.get(bracketPointer).equals('"')) {
         isEscaping = true;
+        lastBracketsWritten.remove(bracketPointer);
         bracketPointer--;
       }
 
       if(e.getKeyChar() == '\'' && lastBracketsWritten.get(bracketPointer).equals('\'')) {
         isEscaping = true;
+        lastBracketsWritten.remove(bracketPointer);
         bracketPointer--;
       }
 
@@ -257,6 +257,8 @@ public class TextTab extends JPanel implements KeyListener{
         editorArea.setCaretPosition(editorArea.getCaretPosition()+1);
         e.consume();
       }
+      System.out.println(bracketPointer);
+      System.out.println(lastBracketsWritten);
     } //if
   } //completeBracket
 
@@ -366,6 +368,10 @@ public class TextTab extends JPanel implements KeyListener{
   public boolean getIsSaved() {
     return isSaved;
   } //getIsSaved
+
+  public JTextArea getTextArea() {
+    return lineNumbers;
+  }
 
 
       /***********************************
