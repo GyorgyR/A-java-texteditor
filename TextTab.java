@@ -252,15 +252,18 @@ public class TextTab extends JPanel implements KeyListener{
         lastBracketsWritten.remove(bracketPointer);
         bracketPointer--;
       }
-
-      if(isEscaping) {
-        editorArea.setCaretPosition(editorArea.getCaretPosition()+1);
-        e.consume();
-      }
-      System.out.println(bracketPointer);
-      System.out.println(lastBracketsWritten);
     } //if
   } //completeBracket
+  
+  //helper method for the bracket completion
+  //this one escapes the closing brackets
+  public void escapeClosingBracket(KeyEvent e, char openBracket, char closeBracket) {
+    //this method goes through the whole saved text
+    //count the number of opening and closing brackets
+    
+    editorArea.setCaretPosition(editorArea.getCaretPosition()+1);
+    e.consume();
+  } //escapeClosingBracket
 
     //the function that does the auto indent
   public void autoIndent() {
