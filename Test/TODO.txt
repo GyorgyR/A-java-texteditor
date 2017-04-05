@@ -4,6 +4,7 @@
 -filebrowser save route
   -themes(colour)
 -color picker in options
+-UI enhancments
 -change menubar and titlebar color
 -add some cool fonts ?
 -get a better icon
